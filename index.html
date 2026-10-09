@@ -1561,4 +1561,77 @@
                     if (seconds <= 120) return { level: "レベル1: 伝説のマスター『ロウェナ・レイブンクロー』", desc: "知性の創設者、時空を超えた究極の魔法の知恵！" };
                     if (seconds <= 160) return { level: "レベル2: グランドマスター『ミネルバ・マクゴナガル』", desc: "厳格で卓越した観察眼、魔法道具の精通者！" };
                     if (seconds <= 250) return { level: "レベル3: エリート学者『ハーマイオニー・グレンジャー』", desc: "天才的な洞察力ですべてのトラップを克服！" };
-                    if (seconds <= 310) return
+                    if (seconds <= 310) return { level: "レベル4: 名誉ある魔女『リリー・ポッター』", desc: "勇気と強い愛情で全ての試練を突破！" };
+                    if (seconds <= 380) return { level: "レベル5: 優秀な探索者『ベラトリックス・レストレンジ』", desc: "強靭な意志と高い集中力！" };
+                    if (seconds <= 460) return { level: "レベル6: 上級魔導師『ニンファドーラ・トンクス』", desc: "機敏で柔軟な対応力を見せた魔女！" };
+                    if (seconds <= 550) return { level: "レベル7: 熟練の魔術師『ルーナ・ラブグッド』", desc: "独自の視点で迷宮を突破した才能！" };
+                    if (seconds <= 650) return { level: "レベル8: 探検家『ジニー・ウィーズリー』", desc: "勇敢に最後までやり遂げた冒険者！" };
+                    return { level: "レベル10: ホグワーツ女子新入生", desc: "魔法の世界へ踏み出した期待の新星！" };
+                } else {
+                    if (seconds <= 120) return { level: "レベル1: 伝説のマスター『アルバス・ダンブルドア』", desc: "時空を超えた究極の魔法の極意と比類なき知恵！" };
+                    if (seconds <= 160) return { level: "レベル2: グランドマスター『ミネルバ・マクゴナガル』", desc: "厳格で卓越した観察眼、魔法道具の精通者！" };
+                    if (seconds <= 250) return { level: "レベル3: エリート学者『ハーマイオニー・グレンジャー』", desc: "驚異的な知性と鋭い洞察力ですべてのトラップを克服！" };
+                    if (seconds <= 380) return { level: "レベル4: 名誉ある魔法使い『ハリー・ポッター』", desc: "勇気と決断力を持って全ての試練を突破！" };
+                    if (seconds <= 460) return { level: "レベル5: 優秀な探索者『セブルス・スネイプ』", desc: "分析力と高い集中力を持つ優れた魔術師！" };
+                    if (seconds <= 550) return { level: "レベル6: 上級魔導師『リーマス・ルーピン』", desc: "冷静沈着にすべての部屋を攻略！" };
+                    if (seconds <= 650) return { level: "レベル7: 熟練の魔術師『シリウス・ブラック』", desc: "大胆不敵な行動力で障害を突破！" };
+                    if (seconds <= 750) return { level: "レベル8: 探検家『ネビル・ロングボトム』", desc: "着実な成長と不屈の精神！" };
+                    return { level: "レベル10: ホグワーツ新入生", desc: "魔法世界の素晴らしい探求者としての第一歩！" };
+                }
+            } else if (lang === 'ko') {
+                if (isFemale) {
+                    if (seconds <= 120) return { level: "레벨 1: 전설의 마스터 '로웨나 래븐클로'", desc: "지혜의 기숙사 창립자, 시공간을 초월한 궁극의 통찰력!" };
+                    if (seconds <= 160) return { level: "레벨 2: 그랜드마스터 '미네르바 맥고나걸'", desc: "엄격하고 탁월한 관찰력으로 모든 마법 유물을 꿰뚫어 봅니다." };
+                    if (seconds <= 250) return { level: "레벨 3: 엘리트 학자 '헤르미온느 그레인저'", desc: "천재적인 지성과 날카로운 눈썰미로 모든 함정을 극복했습니다!" };
+                    if (seconds <= 310) return { level: "레벨 4: 명예로운 마녀 '릴리 포터'", desc: "용기와 깊은 사랑으로 모든 시련을 정복했습니다!" };
+                    if (seconds <= 380) return { level: "레벨 5: 저명한 탐구자 '벨라트릭스 레스트레인지'", desc: "강인한 의지와 집중력을 보여준 마녀!" };
+                    if (seconds <= 460) return { level: "레벨 6: 고급 마녀 '님파도라 통크스'", desc: "재치 있고 유연하게 위기를 탈출한 마녀!" };
+                    if (seconds <= 550) return { level: "레벨 7: 숙련된 마녀 '루나 러브굿'", desc: "독창적인 시각으로 마로더의 지도를 돌파한 재능!" };
+                    if (seconds <= 650) return { level: "레벨 8: 탐험가 '지니 위즐리'", desc: "용기 있게 끝까지 완주한 모험가!" };
+                    return { level: "레벨 10: 호그와트 여학생 신입생", desc: "마법 세계의 위대한 탐험을 향한 멋진 첫걸음!" };
+                } else {
+                    if (seconds <= 120) return { level: "레벨 1: 전설의 마스터 '알버스 덤블도어'", desc: "시공간을 초월한 궁극의 마법 지혜와 통찰력!" };
+                    if (seconds <= 160) return { level: "레벨 2: 그랜드마스터 '미네르바 맥고나걸'", desc: "엄격하고 탁월한 관찰력으로 모든 마법 유물을 꿰뚫어 봅니다." };
+                    if (seconds <= 250) return { level: "레벨 3: 엘리트 학자 '헤르미온느 그레인저'", desc: "놀라운 지성과 날카로운 눈썰미로 모든 가짜 함정을 극복했습니다!" };
+                    if (seconds <= 310) return { level: "레벨 4: 명예로운 마법사 '해리 포터'", desc: "용기와 결단력으로 모든 챔버의 시련을 정복했습니다!" };
+                    if (seconds <= 380) return { level: "레벨 5: 저명한 탐구자 '세베루스 스네이프'", desc: "철저한 분석력과 고도의 집중력을 지닌 마법사!" };
+                    if (seconds <= 460) return { level: "레벨 6: 고급 마법사 '리무스 루핀'", desc: "차분하고 지혜롭게 복잡한 방을 돌파!" };
+                    if (seconds <= 550) return { level: "레벨 7: 숙련된 마법사 '시리우스 블랙'", desc: "대담하고 민첩하게 모든 장애물을 극복!" };
+                    if (seconds <= 650) return { level: "레벨 8: 탐험가 '네빌 롱바텀'", desc: "꾸준한 성장과 꺾이지 않는 마음!" };
+                    return { level: "레벨 10: 호그와트 신입생", desc: "마법 세계의 위대한 탐험을 향한 멋진 첫걸음입니다!" };
+                }
+            } else {
+                if (isFemale) {
+                    if (seconds <= 120) return { level: "Level 1: Legendary Master 'Rowena Ravenclaw'", desc: "Founder of wisdom, supreme insight across time and space!" };
+                    if (seconds <= 160) return { level: "Level 2: Grandmaster 'Minerva McGonagall'", desc: "Strict, brilliant, and deeply knowledgeable in magical arts." };
+                    if (seconds <= 250) return { level: "Level 3: Elite Scholar 'Hermione Granger'", desc: "Incredible intellect and keen observation overcoming all traps!" };
+                    if (seconds <= 310) return { level: "Level 4: Honorable Witch 'Lily Potter'", desc: "Brave and loving, conquering chamber challenges!" };
+                    if (seconds <= 380) return { level: "Level 5: Distinguished Seeker 'Bellatrix Lestrange'", desc: "Formidable will and sharp focus." };
+                    if (seconds <= 460) return { level: "Level 6: Advanced Witch 'Nymphadora Tonks'", desc: "Agile and resourceful!" };
+                    if (seconds <= 550) return { level: "Level 7: Skilled Adept 'Luna Lovegood'", desc: "Unique perspective and creative problem solving." };
+                    if (seconds <= 650) return { level: "Level 8: Explorer 'Ginny Weasley'", desc: "Courageous perseverance to the very end." };
+                    return { level: "Level 10: Hogwarts First-Year Witch", desc: "An enthusiastic newcomer ready to master magic!" };
+                } else {
+                    if (seconds <= 120) return { level: "Level 1: Legendary Master 'Albus Dumbledore'", desc: "Supreme magical mastery and unmatched wisdom across time and space!" };
+                    if (seconds <= 160) return { level: "Level 2: Grandmaster 'Minerva McGonagall'", desc: "Strict, brilliant, and deeply knowledgeable in all magical artifacts." };
+                    if (seconds <= 250) return { level: "Level 3: Elite Scholar 'Hermione Granger'", desc: "Incredible intellect and keen observation overcoming all decoy traps!" };
+                    if (seconds <= 310) return { level: "Level 4: Honorable Wizard 'Harry Potter'", desc: "Brave and determined, conquering the ultimate chamber challenges!" };
+                    if (seconds <= 380) return { level: "Level 5: Distinguished Seeker 'Severus Snape'", desc: "Sharp-witted, highly analytical, and exceptionally focused." };
+                    if (seconds <= 460) return { level: "Level 6: Advanced Mage 'Remus Lupin'", desc: "Steady and resourceful, navigating through complex magical rooms." };
+                    if (seconds <= 550) return { level: "Level 7: Skilled Adept 'Sirius Black'", desc: "Daring and agile, successfully defeating every obstacle." };
+                    if (seconds <= 650) return { level: "Level 8: Explorer 'Neville Longbottom'", desc: "Courageous growth and steady perseverance to the end." };
+                    return { level: "Level 10: Apprentice 'Hogwarts First-Year'", desc: "An enthusiastic newcomer ready to master the magical arts!" };
+                }
+            }
+        }
+
+        function nextLevel(event) {
+            if (event) event.preventDefault();
+            if (currentLevel < levelsData.length - 1) {
+                currentLevel++;
+                loadLevel(currentLevel);
+            }
+        }
+    </script>
+</body>
+</html>
