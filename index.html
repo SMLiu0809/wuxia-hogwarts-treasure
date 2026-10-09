@@ -1,0 +1,1740 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>武林與霍格華茲：十級榮譽尋寶大師</title>
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --panel-bg: #ffffff;
+            --text-color: #1e293b;
+            --accent-color: #2563eb;
+            --accent-hover: #1d4ed8;
+            --card-border: #cbd5e1;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            width: 100%;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--panel-bg);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            border-bottom: 3px solid var(--accent-color);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            font-weight: 800;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .lang-switcher select, .nav-btn {
+            background: #fff;
+            color: #334155;
+            border: 1px solid var(--card-border);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: bold;
+        }
+
+        .nav-btn:hover, .lang-switcher select:hover {
+            background: #f1f5f9;
+        }
+
+        .game-container {
+            max-width: 1050px;
+            width: 95%;
+            margin: 15px auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #setupScreen, #encyclopediaScreen, #transitionScreen, #quizScreen {
+            background: var(--panel-bg);
+            padding: 35px 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+            border: 4px solid var(--accent-color);
+            margin-top: 25px;
+            display: block;
+        }
+
+        #encyclopediaScreen, #transitionScreen, #quizScreen {
+            display: none;
+        }
+
+        #encyclopediaScreen {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .game-hero-banner {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+            text-align: left;
+        }
+        .game-hero-banner h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.3rem;
+            color: #fef08a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .game-hero-banner p {
+            margin: 0;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #f1f5f9;
+        }
+
+        #transitionScreen {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+            border: 4px solid #f59e0b;
+            color: #ffffff;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+            color: #334155;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid var(--card-border);
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+            color: #334155;
+            cursor: pointer;
+        }
+        .checkbox-group input {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        #gameScreen {
+            display: none;
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .level-select-panel {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .level-btn {
+            background: #e2e8f0;
+            border: 2px solid var(--card-border);
+            color: #334155;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: bold;
+        }
+
+        .level-btn.active {
+            background: var(--accent-color);
+            color: #ffffff;
+            border-color: var(--accent-hover);
+        }
+
+        .level-btn.locked {
+            background: #cbd5e1;
+            color: #64748b;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .status-bar {
+            display: flex;
+            gap: 20px;
+            background: var(--panel-bg);
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 2px solid var(--card-border);
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            align-items: center;
+        }
+
+        .status-bar span {
+            color: #d97706;
+            font-weight: bold;
+        }
+
+        .hint-btn {
+            background: #d97706;
+            color: white;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        .hint-btn:hover {
+            background: #b45309;
+        }
+
+        .checklist-bar {
+            background: var(--panel-bg);
+            border: 2px solid var(--card-border);
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            width: 100%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .riddle-box {
+            background: #fffbeb;
+            border-left: 4px solid #d97706;
+            padding: 8px 12px;
+            font-size: 0.95rem;
+            color: #92400e;
+            font-style: italic;
+            border-radius: 4px;
+            margin-bottom: 5px;
+        }
+
+        .checklist-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            max-height: 100px;
+            overflow-y: auto;
+        }
+
+        .target-item {
+            background: #f1f5f9;
+            border: 2px solid var(--card-border);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+        }
+
+        .target-item.current-target {
+            border-color: #d97706;
+            background: #fef3c7;
+            box-shadow: 0 0 8px rgba(217, 119, 6, 0.4);
+        }
+
+        .target-item.found {
+            text-decoration: line-through;
+            color: #94a3b8;
+            background: #e2e8f0;
+            border-color: #cbd5e1;
+        }
+
+        .room-scene {
+            position: relative;
+            width: 100%;
+            height: 520px;
+            background: linear-gradient(135deg, #fef9c3 0%, #e0f2fe 100%);
+            border: 4px solid #94a3b8;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.1), 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .room-object {
+            position: absolute;
+            font-size: 2.5rem;
+            cursor: pointer;
+            user-select: none;
+            filter: drop-shadow(0 3px 6px rgba(0,0,0,0.2));
+            z-index: 10;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.15s ease;
+        }
+
+        .room-object:hover {
+            transform: scale(1.25) !important;
+        }
+
+        .room-object.decoy-item {
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15)) hue-rotate(120deg) saturate(70%) contrast(110%);
+            opacity: 0.9;
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(1); filter: drop-shadow(0 0 5px #d97706); }
+            50% { transform: scale(1.4); filter: drop-shadow(0 0 20px #ef4444); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 5px #d97706); }
+        }
+        .room-object.hint-glow {
+            animation: pulseGlow 0.6s ease-in-out infinite;
+        }
+
+        .room-object.collected, .room-object.triggered {
+            display: none;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .modal-content {
+            background: var(--panel-bg);
+            padding: 30px;
+            border-radius: 16px;
+            max-width: 550px;
+            width: 90%;
+            text-align: center;
+            border: 4px solid #d97706;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .modal-content h2 {
+            color: #d97706;
+            margin-top: 0;
+            font-size: 1.8rem;
+        }
+
+        .modal-content p {
+            font-size: 1.1rem;
+            color: #334155;
+            line-height: 1.6;
+        }
+
+        .certificate-box {
+            background: #fffbeb;
+            border: 3px double #d97706;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+            text-align: left;
+        }
+
+        .btn {
+            background-color: var(--accent-color);
+            color: #ffffff;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .quiz-option-btn {
+            display: block;
+            width: 100%;
+            background: #f1f5f9;
+            border: 2px solid var(--card-border);
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #334155;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+        }
+        .quiz-option-btn:hover {
+            background: #e2e8f0;
+            border-color: var(--accent-color);
+        }
+
+        .floating-msg {
+            position: absolute;
+            font-weight: bold;
+            font-size: 1.2rem;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        .encyclopedia-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+            text-align: left;
+        }
+        .encyclopedia-item {
+            background: #f1f5f9;
+            border: 1px solid var(--card-border);
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        .encyclopedia-item.locked {
+            opacity: 0.4;
+            filter: grayscale(100%);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 id="appTitle">🏛️ 武林與霍格華茲：十級榮譽尋寶大師</h1>
+        <div class="header-controls">
+            <button class="nav-btn" id="encyclopediaBtn" type="button">📜 寶物殿堂</button>
+            <button class="nav-btn" id="audioToggleBtn" type="button" style="background:#d97706; color:white;">🎵 音樂開關</button>
+            <div class="lang-switcher">
+                <select id="langSelect">
+                    <option value="zh-TW">繁體中文</option>
+                    <option value="zh-CN">简体中文</option>
+                    <option value="en">English</option>
+                    <option value="ja">日本語</option>
+                    <option value="ko">한국어</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <div class="game-container">
+        <!-- 設定首頁 -->
+        <div id="setupScreen">
+            <div class="game-hero-banner">
+                <h3 id="heroTitle">⚔️ 跨時空傳奇：武林神兵與魔法密寶之旅 🪄</h3>
+                <p id="heroDesc">
+                    歡迎來到東西方傳奇交織的時空藏寶閣！從金庸筆下的倚天劍、屠龍刀，到霍格華茲的老魔杖與分靈體。考驗您的眼力、文學聯想與專注力。完成十關歷練並通過宗師試煉，奪取至高無上的十級榮譽證書！
+                </p>
+            </div>
+
+            <h2 id="setupTitle" style="color: #2563eb; margin-top:0;">玩家冒險檔案與難度設定</h2>
+            <div class="form-group">
+                <label id="labelCodename">代號 / 玩家名稱：</label>
+                <input type="text" id="playerCodename" placeholder="請輸入您的代號">
+            </div>
+            <div class="form-group">
+                <label id="labelGender">性別：</label>
+                <select id="playerGender">
+                    <option value="male" id="optMale">男 / Male</option>
+                    <option value="female" id="optFemale">女 / Female</option>
+                    <option value="other" id="optOther">其他 / Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label id="labelCountry">國別：</label>
+                <select id="playerCountry">
+                    <option value="Taiwan">台灣 (Taiwan)</option>
+                    <option value="China">中國 (China)</option>
+                    <option value="Japan">日本 (Japan)</option>
+                    <option value="South Korea">韓國 (South Korea)</option>
+                    <option value="United States">United States</option>
+                    <option value="United Kingdom">United Kingdom</option>
+                    <option value="Canada">Canada</option>
+                    <option value="Australia">Australia</option>
+                    <option value="New Zealand">New Zealand</option>
+                    <option value="Ireland">Ireland</option>
+                    <option value="Singapore">Singapore</option>
+                    <option value="Malaysia">Malaysia</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label id="labelDifficulty">選擇遊戲難度：</label>
+                <select id="playerDifficulty">
+                    <option value="novice" id="diffNovice">入門級 (Novice - 50%物品、無干擾)</option>
+                    <option value="easy" id="diffEasy">輕鬆級 (Easy - 70%物品、1個同類仿冒物)</option>
+                    <option value="normal" id="diffNormal" selected>普通級 (Normal - 80%物品、1-2個同類仿冒物)</option>
+                    <option value="hard" id="diffHard">困難級 (Hard - 90%物品、2-3個同類仿冒物)</option>
+                    <option value="master" id="diffMaster">大師級 (Master - 全部物品、高難度微瑕仿冒物)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="checkbox-group">
+                    <input type="checkbox" id="useShield" checked>
+                    <span id="labelShield">🛡️ 攜帶「降龍護符 / 魔法防護罩」（可免疫 1 次干擾物懲罰）</span>
+                </label>
+            </div>
+            <button class="btn" id="startBtn" type="button">開始冒險 / Start Game</button>
+        </div>
+
+        <!-- 寶物殿堂（圖鑑）畫面 -->
+        <div id="encyclopediaScreen">
+            <h2 id="encyclopediaTitle" style="color: #2563eb; margin-top:0;">📜 時空寶物殿堂 (Encyclopedia)</h2>
+            <p id="encyclopediaDesc" style="color: #475569; font-size: 0.95rem;">收集您在冒險中尋獲的傳奇武林神兵與霍格華茲魔法道具！</p>
+            <div class="encyclopedia-grid" id="encyclopediaGrid"></div>
+            <button class="btn" id="backToSetupBtn" type="button">返回 / Back</button>
+        </div>
+
+        <!-- 轉場過場動畫畫面 -->
+        <div id="transitionScreen">
+            <h2 style="color: #f59e0b; font-size: 2rem; margin-top: 0;">⚡ 宗師殿堂：終極大考驗 ⚡</h2>
+            <p style="font-size: 1.1rem; line-height: 1.8; color: #cbd5e1; margin: 25px 0;">
+                「十關歷練已過，江湖風雲再起。<br>
+                唯有博古通今、洞察秋毫之大師，方能通過終極五道智力考驗，榮獲時空至高榮譽證書！」
+            </p>
+            <div id="transitionTimer" style="font-size: 2.5rem; font-weight: bold; color: #fbbf24; margin: 20px 0;">3</div>
+            <button class="btn" id="startQuizDirectBtn" type="button" style="background-color: #d97706;">立即接受考驗 / Begin Trial</button>
+        </div>
+
+        <!-- 宗師試煉選擇題畫面 -->
+        <div id="quizScreen">
+            <h2 id="quizHeader" style="color: #d97706; margin-top:0;">🏆 宗師殿堂：終極試煉</h2>
+            <p id="quizInstructions" style="color: #475569; font-size: 0.95rem;">5道隨機考題全對即可榮獲十級大師證書，答錯一題將重返第一關重新練功！</p>
+            <div id="quizProgress" style="font-weight: bold; color: #2563eb; margin: 10px 0;"></div>
+            <div id="quizQuestionBox" style="font-size: 1.15rem; font-weight: bold; color: #1e293b; margin: 15px 0;"></div>
+            <div id="quizOptionsContainer"></div>
+        </div>
+
+        <!-- 遊戲主畫面 -->
+        <div id="gameScreen">
+            <div class="level-select-panel" id="levelSelectPanel"></div>
+
+            <div class="status-bar">
+                <div>得分: <span id="score">0</span></div>
+                <div>時間: <span id="timer">0</span>s</div>
+                <div>護符狀態: <span id="shieldStatus" style="color:#16a34a;">🛡️ 已啟動</span></div>
+                <button class="hint-btn" id="hintBtn" type="button">💡 提示 (Hint)</button>
+            </div>
+
+            <div class="checklist-bar">
+                <div class="riddle-box" id="riddleText">✨ 謎語提示：尋找傳說中的武林至尊神兵...</div>
+                <div id="checklistTitle" style="font-size: 1.05rem; font-weight: bold; color: #334155;">
+                    🔍 第 1 關尋寶清單（請依黃色框標示的順序點擊）：
+                </div>
+                <div class="checklist-items" id="checklistContainer"></div>
+            </div>
+
+            <div class="room-scene" id="roomScene"></div>
+        </div>
+    </div>
+
+    <!-- 通關 / 證書彈窗 -->
+    <div class="modal" id="winModal">
+        <div class="modal-content">
+            <h2 id="modalTitle">🎉 關卡完成！</h2>
+            <p id="winMessage">恭喜通關！</p>
+            <div id="certificateContainer"></div>
+            <button class="btn" id="nextLevelBtn" type="button">進入下一關</button>
+        </div>
+    </div>
+
+    <script>
+        const i18n = {
+            'zh-TW': {
+                appTitle: '🏛️ 武林與霍格華茲：十級榮譽尋寶大師',
+                heroTitle: '⚔️ 跨時空傳奇：武林神兵與魔法密寶之旅 🪄',
+                heroDesc: '歡迎來到東西方傳奇交織的時空藏寶閣！從金庸筆下的倚天劍、屠龍刀，到霍格華茲的老魔杖與分靈體。考驗您的眼力、文學聯想與專注力。完成十關歷練並通過宗師試煉，奪取至高無上的十級榮譽證書！',
+                setupTitle: '玩家冒險檔案與難度設定',
+                labelCodename: '代號 / 玩家名稱：',
+                labelGender: '性別：',
+                optMale: '男',
+                optFemale: '女',
+                optOther: '其他',
+                labelCountry: '國別：',
+                labelDifficulty: '選擇遊戲難度：',
+                labelShield: '🛡️ 攜帶「降龍護符 / 魔法防護罩」（可免疫 1 次干擾物懲罰）',
+                diffNovice: '入門級 (Novice - 50%物品、無干擾)',
+                diffEasy: '輕鬆級 (Easy - 70%物品、1個同類仿冒物)',
+                diffNormal: '普通級 (Normal - 80%物品、1-2個同類仿冒物)',
+                diffHard: '困難級 (Hard - 90%物品、2-3個同類仿冒物)',
+                diffMaster: '大師級 (Master - 全部物品、高難度微瑕仿冒物)',
+                startBtn: '開始冒險',
+                encyclopediaBtn: '📜 寶物殿堂',
+                encyclopediaTitle: '📜 時空寶物殿堂 (Encyclopedia)',
+                encyclopediaDesc: '收集您在冒險中尋獲的傳奇武林神兵與霍格華茲魔法道具！',
+                backToSetupBtn: '返回設定',
+                checklistPrefix: '🔍 第 ',
+                checklistSuffix: ' 關尋寶清單（請依黃色框標示的順序點擊，小心似是而非的同類仿冒物！）：',
+                btnNext: '進入終極大考驗',
+                winLevel: '🎉 第 ',
+                levelCleared: ' 關通關！',
+                winAll: '🏆 恭喜通關所有十關！即將進入宗師殿堂！',
+                foundPrompt: '請按清單順序找!',
+                decoyPrompt: '這是相似的仿冒贗品！+5秒!',
+                shieldUsedPrompt: '🛡️ 護符抵銷了一次懲罰！',
+                hintBtnText: '💡 提示 (Hint)',
+                encounterMsg: '🌟 時空奇遇：巧遇江湖大俠，幫您化解了一次危機！',
+                quizHeader: '🏆 宗師殿堂：終極試煉',
+                quizInstructions: '5道隨機考題全對即可榮獲十級大師證書，答錯一題將重返第一關重新練功！',
+                quizFailMsg: '❌ 回答錯誤！功力尚欠火候，請回江湖第一關重新練功！',
+                quizSuccessMsg: '🎉 恭喜全部答對！您是當之無愧的十級尋寶宗師！',
+                lockedLevelAlert: '🔒 此關卡尚未解鎖！請先通過前面關卡。'
+            },
+            'zh-CN': {
+                appTitle: '🏛️ 武林与霍格华兹：十级荣誉寻宝大师',
+                heroTitle: '⚔️ 跨时空传奇：武林神兵与魔法密宝之旅 🪄',
+                heroDesc: '欢迎来到东西方传奇交织的时空藏宝阁！从金庸笔下的倚天剑、屠龙刀，到霍格华兹的老魔杖与分灵体。考验您的眼力、文学联想与专注力。完成十关历练并通过宗师试炼，夺取至高无上的十级荣誉证书！',
+                setupTitle: '玩家冒险档案与难度设定',
+                labelCodename: '代号 / 玩家名称：',
+                labelGender: '性别：',
+                optMale: '男',
+                optFemale: '女',
+                optOther: '其他',
+                labelCountry: '国别：',
+                labelDifficulty: '选择游戏难度：',
+                labelShield: '🛡️ 携带「降龙护符 / 魔法防护罩」（可免疫 1 次干扰物惩罚）',
+                diffNovice: '入门级 (Novice - 50%物品、无干扰)',
+                diffEasy: '轻松级 (Easy - 70%物品、1个同类仿冒物)',
+                diffNormal: '普通级 (Normal - 80%物品、1-2个同类仿冒物)',
+                diffHard: '困难级 (Hard - 90%物品、2-3个同类仿冒物)',
+                diffMaster: '大师级 (Master - 全部物品、多个强力干扰物)',
+                startBtn: '开始冒险',
+                encyclopediaBtn: '📜 宝物殿堂',
+                encyclopediaTitle: '📜 时空宝物殿堂 (Encyclopedia)',
+                encyclopediaDesc: '收集您在冒险中寻获的传奇武林神兵与霍格华兹魔法道具！',
+                backToSetupBtn: '返回设置',
+                checklistPrefix: '🔍 第 ',
+                checklistSuffix: ' 关寻宝清单（请依黄色框标示的顺序点击，小心似是而非的同类仿冒物！）：',
+                btnNext: '进入终极大考验',
+                winLevel: '🎉 第 ',
+                levelCleared: ' 关通关！',
+                winAll: '🏆 恭喜通关所有十关！即将进入宗师殿堂！',
+                foundPrompt: '请按清单顺序找!',
+                decoyPrompt: '这是相似的仿冒赝品！+5秒!',
+                shieldUsedPrompt: '🛡️ 护符抵消了一次惩罚！',
+                hintBtnText: '💡 提示 (Hint)',
+                encounterMsg: '🌟 时空奇遇：巧遇江湖大侠，帮您化解了一次危机！',
+                quizHeader: '🏆 宗师殿堂：终极试炼',
+                quizInstructions: '5道随机考题全对即可荣获十级大师证书，答错一题将重返第一关重新练功！',
+                quizFailMsg: '❌ 回答错误！功力尚欠火候，请回江湖第一关重新练功！',
+                quizSuccessMsg: '🎉 恭喜全部答对！您是当之无愧的十级寻宝宗师！',
+                lockedLevelAlert: '🔒 此关卡尚未解锁！请先通过前面关卡。'
+            },
+            'en': {
+                appTitle: '🏛️ Wuxia & Hogwarts: Elite Treasure Master',
+                heroTitle: '⚔️ Timeless Legend: Wuxia & Magic Artifact Journey 🪄',
+                heroDesc: 'Welcome to the cross-temporal Chamber of Artifacts! Test your observation, literary association, and focus. Complete 10 levels and pass the Grandmaster Trial to claim your Elite Certificate!',
+                setupTitle: 'Player Profile & Difficulty Setup',
+                labelCodename: 'Codename / Player Name:',
+                labelGender: 'Gender:',
+                optMale: 'Male',
+                optFemale: 'Female',
+                optOther: 'Other',
+                labelCountry: 'Country:',
+                labelDifficulty: 'Select Difficulty:',
+                labelShield: '🛡️ Equip "Amulet / Shield" (Immune to 1 decoy penalty)',
+                diffNovice: 'Novice (50% items, no decoys)',
+                diffEasy: 'Easy (70% items, 1 similar decoy)',
+                diffNormal: 'Normal (80% items, 1-2 similar decoys)',
+                diffHard: 'Hard (90% items, 2-3 similar decoys)',
+                diffMaster: 'Master (All items, tricky forged decoys)',
+                startBtn: 'Start Adventure',
+                encyclopediaBtn: '📜 Encyclopedia',
+                encyclopediaTitle: '📜 Chamber of Artifacts',
+                encyclopediaDesc: 'Collect legendary Wuxia weapons and Hogwarts magical items!',
+                backToSetupBtn: 'Back',
+                checklistPrefix: '🔍 Level ',
+                checklistSuffix: ' Checklist (Click in the highlighted order, watch out for similar fakes!):',
+                btnNext: 'Enter Grandmaster Trial',
+                winLevel: '🎉 Level ',
+                winAll: '🏆 Congratulations on beating all 10 levels! Entering Grandmaster Trial!',
+                foundPrompt: 'Follow the list order!',
+                decoyPrompt: 'That is a forged fake! +5s!',
+                shieldUsedPrompt: '🛡️ Shield blocked the penalty!',
+                hintBtnText: '💡 Hint',
+                encounterMsg: '🌟 Temporal Encounter: A hero aided you and cleared a threat!',
+                quizHeader: '🏆 Grandmaster Trial',
+                quizInstructions: 'Answer 5 questions correctly to earn your Elite Certificate. One wrong answer returns you to Level 1!',
+                quizFailMsg: '❌ Incorrect! You need more training. Returning to Level 1!',
+                quizSuccessMsg: '🎉 All correct! You are a true Grandmaster!',
+                lockedLevelAlert: '🔒 Level locked! Please beat previous levels first.'
+            },
+            'ja': {
+                appTitle: '🏛️ 武術とホグワーツ：十級栄誉トレジャーマスター',
+                heroTitle: '⚔️ 時空を超えた伝説：武術神兵と魔法の宝の旅 🪄',
+                heroDesc: '東西の伝説が交差する時空の宝物庫へようこそ！観察力と記憶力を試して、10のレベルとグランドマスター試練をクリアし、十級証明書を手に入れよう！',
+                setupTitle: 'プレイヤープロフィールと難易度設定',
+                labelCodename: 'コードネーム / プレイヤー名：',
+                labelGender: '性別：',
+                optMale: '男性',
+                optFemale: '女性',
+                optOther: 'その他',
+                labelCountry: '国籍：',
+                labelDifficulty: '難易度の選択：',
+                labelShield: '🛡️ 護符シールド装備（お邪魔ペナルティ1回無効）',
+                diffNovice: '初心者 (50% アイテム、お邪魔なし)',
+                diffEasy: '簡単 (70% アイテム、同類の偽物1個)',
+                diffNormal: '普通 (80% アイテム、同類の偽物1〜2個)',
+                diffHard: '難しい (90% アイテム、同類の偽物2〜3個)',
+                diffMaster: 'マスター (全アイテム、巧妙な偽物多数)',
+                startBtn: '冒険を開始',
+                encyclopediaBtn: '📜 アーティファクト図鑑',
+                encyclopediaTitle: '📜 宝物殿堂 (Encyclopedia)',
+                encyclopediaDesc: '冒険で見つけた伝説の武術武器や魔法道具を収集しよう！',
+                backToSetupBtn: '戻る',
+                checklistPrefix: '🔍 レベル ',
+                checklistSuffix: ' チェックリスト（順番にクリック、似た偽物に注意！）：',
+                btnNext: 'グランドマスター試練へ',
+                winLevel: '🎉 レベル ',
+                levelCleared: ' クリア！',
+                winAll: '🏆 全10レベル制覇！グランドマスター試練に挑戦します！',
+                foundPrompt: 'リストの順番通りに探してください！',
+                decoyPrompt: 'それは似せた偽物です！+5秒！',
+                shieldUsedPrompt: '🛡️ シールドがペナルティを防ぎました！',
+                hintBtnText: '💡 ヒント',
+                encounterMsg: '🌟 時空の遭遇：旅の武芸者が現れ、ピンチを救ってくれました！',
+                quizHeader: '🏆 グランドマスター試練',
+                quizInstructions: '5問全問正解で十級証明書授与！不正解でレベル1に戻ります！',
+                quizFailMsg: '❌ 不正解！修行をやり直すためレベル1に戻ります！',
+                quizSuccessMsg: '🎉 全問正解！真のトレジャーマスターです！',
+                lockedLevelAlert: '🔒 このレベルはロックされています。前のレベルをクリアしてください。'
+            },
+            'ko': {
+                appTitle: '🏛️ 무협과 호그와트: 10급 명예 보물 마스터',
+                heroTitle: '⚔️ 시공초월 전설: 무협 무기와 마법 보물의 여정 🪄',
+                heroDesc: '동서양의 전설이 교차하는 시공간 보물 전당에 오신 것을 환영합니다! 관찰력과 집중력을 시험하고 10단계와 그랜드마스터 시련을 돌파하여 10급 증서를 획득하세요!',
+                setupTitle: '플레이어 프로필 및 난이도 설정',
+                labelCodename: '코드명 / 플레이어 이름:',
+                labelGender: '성별:',
+                optMale: '남성',
+                optFemale: '여성',
+                optOther: '기타',
+                labelCountry: '국가:',
+                labelDifficulty: '난이도 선택:',
+                labelShield: '🛡️ 보호막 부적 장착 (방해물 페널티 1회 면제)',
+                diffNovice: '초급 (50% 아이템, 방해물 없음)',
+                diffEasy: '쉬움 (70% 아이템, 유사한 가짜 1개)',
+                diffNormal: '보통 (80% 아이템, 유사한 가짜 1~2개)',
+                diffHard: '어려움 (90% 아이템, 유사한 가짜 2~3개)',
+                diffMaster: '마스터 (모든 아이템, 교묘한 가짜 다수)',
+                startBtn: '모험 시작',
+                encyclopediaBtn: '📜 보물 도감',
+                encyclopediaTitle: '📜 시공간 보물 전당 (Encyclopedia)',
+                encyclopediaDesc: '모험에서 발견한 전설의 무협 무기와 호그와트 마법 도구를 수집하세요!',
+                backToSetupBtn: '돌아가기',
+                checklistPrefix: '🔍 ',
+                checklistSuffix: '단계 보물 목록 (순서대로 클릭하세요, 유사한 가짜를 조심!):',
+                btnNext: '그랜드마스터 시련으로',
+                winLevel: '🎉 ',
+                levelCleared: '단계 클리어!',
+                winAll: '🏆 10단계 클리어! 그랜드마스터 시련이 시작됩니다!',
+                foundPrompt: '목록 순서대로 찾으세요!',
+                decoyPrompt: '비슷하게 만든 가짜입니다! +5초!',
+                shieldUsedPrompt: '🛡️ 보호막이 페널티를 막아주었습니다!',
+                hintBtnText: '💡 힌트',
+                encounterMsg: '🌟 시공간 조우: 의로운 협객이 나타나 위기를 모면하게 해주었습니다!',
+                quizHeader: '🏆 그랜드마스터 시련',
+                quizInstructions: '5문제를 모두 맞혀야 10급 증서를 받습니다. 틀리면 1단계로 강등됩니다!',
+                quizFailMsg: '❌ 오답! 수련이 부족하여 1단계로 돌아갑니다!',
+                quizSuccessMsg: '🎉 전원 정답! 진정한 보물 마스터입니다!',
+                lockedLevelAlert: '🔒 잠긴 레벨입니다. 이전 레벨을 먼저 클리어하세요.'
+            }
+        };
+
+        const levelsData = [
+            { 
+                theme: "金庸武俠入門", 
+                riddle: {
+                    'zh': '✨ 謎語：劍氣縱橫三萬里，一劍光寒定江湖。尋找傳說中的武林神兵！',
+                    'en': '✨ Riddle: A legendary blade that commands the pugilistic world.',
+                    'ja': '✨ 謎解き：天下を制する伝説の神剣を探せ！',
+                    'ko': '✨ 수수께끼: 천하를 호령하는 전설의 신검을 찾으세요!'
+                },
+                items: [
+                    {name:{'zh': '倚天劍', 'en': 'Heaven Sword', 'ja': '倚天の剣', 'ko': '의천검'}, icon:'🗡️', decoyName: {'zh': '仿冒倚天劍(贗品)', 'en': 'Fake Heaven Sword', 'ja': '偽りの倚天の剣', 'ko': '가짜 의천검'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '屠龍刀', 'en': 'Dragon Saber', 'ja': '屠龍の宝刀', 'ko': '도룡도'}, icon:'🔪', decoyName: {'zh': '仿冒屠龍刀(贗品)', 'en': 'Fake Dragon Saber', 'ja': '偽りの屠龍の宝刀', 'ko': '가짜 도룡도'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '打狗棒', 'en': 'Dog-Beating Staff', 'ja': '打狗棒', 'ko': '타구봉'}, icon:'🥢', decoyName: {'zh': '山寨打狗棒(贗品)', 'en': 'Fake Dog-Beating Staff', 'ja': '偽りの打狗棒', 'ko': '가짜 타구봉'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '玄鐵重劍', 'en': 'Heavy Iron Sword', 'ja': '玄鉄の重剣', 'ko': '현철중검'}, icon:'⚔️', decoyName: {'zh': '劣質玄鐵劍(贗品)', 'en': 'Fake Heavy Sword', 'ja': '偽りの玄鉄の重剣', 'ko': '가짜 현철중검'}, isDistinctDecoy: false}
+                ]
+            },
+            { 
+                theme: "金庸神兵進階", 
+                riddle: {
+                    'zh': '✨ 謎語：火焰燃燒聖火令，金蛇狂舞劍氣生。尋找波斯與中原的奇寶！',
+                    'en': '✨ Riddle: Flames of holy fire and golden serpents dancing in the wind.',
+                    'ja': '✨ 謎解き：聖火の輝きと金蛇の舞う剣を探せ！',
+                    'ko': '✨ 수수께끼: 성화의 불꽃과 금사(金蛇)가 춤추는 보물을 찾으세요!'
+                },
+                items: [
+                    {name:{'zh': '聖火令', 'en': 'Holy Flame Tablet', 'ja': '聖火令', 'ko': '성화령'}, icon:'🔥', decoyName: {'zh': '仿冒聖火令(贗品)', 'en': 'Fake Holy Tablet', 'ja': '偽りの聖火令', 'ko': '가짜 성화령'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '金蛇劍', 'en': 'Golden Snake Sword', 'ja': '金蛇の剣', 'ko': '금사검'}, icon:'🐍', decoyName: {'zh': '仿冒金蛇劍(贗品)', 'en': 'Fake Snake Sword', 'ja': '偽りの金蛇の剣', 'ko': '가짜 금사검'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '六脈神劍', 'en': 'Six Meridians Sword', 'ja': '六脈神剣', 'ko': '육맥신검'}, icon:'✨', decoyName: {'zh': '仿冒六脈神劍(贗品)', 'en': 'Fake Meridians Sword', 'ja': '偽りの六脈神剣', 'ko': '가짜 육맥신검'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '淑女劍', 'en': 'Lady Sword', 'ja': '淑女の剣', 'ko': '숙녀검'}, icon:'🗡️', decoyName: {'zh': '仿冒淑女劍(贗品)', 'en': 'Fake Lady Sword', 'ja': '偽りの淑女の剣', 'ko': '가짜 숙녀검'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '君子劍', 'en': 'Gentleman Sword', 'ja': '君子の剣', 'ko': '군자검'}, icon:'⚔️', decoyName: {'zh': '仿冒君子劍(贗品)', 'en': 'Fake Gentleman Sword', 'ja': '偽りの君子の剣', 'ko': '가짜 군자검'}, isDistinctDecoy: false}
+                ]
+            },
+            { 
+                theme: "金庸奇門暗器", 
+                riddle: {
+                    'zh': '✨ 謎語：冰魄寒針透骨涼，判官墨筆斷陰陽。尋找江湖中令人聞風喪膽的暗器！',
+                    'en': '✨ Riddle: Piercing needles of ice and the judge brush that decides fate.',
+                    'ja': '✨ 謎解き：骨まで凍る氷の針と運命を定める判官の筆！',
+                    'ko': '✨ 수수께끼: 뼈까지 얼리는 얼음 바늘과 운명을 결정하는 판관의 붓!'
+                },
+                items: [
+                    {name:{'zh': '冰魄銀針', 'en': 'Ice-Soul Needle', 'ja': '氷魄銀針', 'ko': '빙백은침'}, icon:'📌', decoyName: {'zh': '普通銀針(贗品)', 'en': 'Fake Ice Needle', 'ja': '偽りの銀針', 'ko': '가짜 은침'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '判官筆', 'en': 'Judge Pen', 'ja': '判官の筆', 'ko': '판관필'}, icon:'✒️', decoyName: {'zh': '普通毛筆(贗品)', 'en': 'Fake Judge Pen', 'ja': '偽りの判官の筆', 'ko': '가짜 판관필'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '綠波香露刀', 'en': 'Green Scented Blade', 'ja': '緑波香露刀', 'ko': '녹파향로도'}, icon:'🧪', decoyName: {'zh': '普通毒水瓶(贗品)', 'en': 'Fake Scented Blade', 'ja': '偽りの緑波香露刀', 'ko': '가짜 녹파향로도'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '軟鞭', 'en': 'Flexible Whip', 'ja': '軟鞭', 'ko': '연편'}, icon:'🧶', decoyName: {'zh': '普通麻繩(贗品)', 'en': 'Fake Whip', 'ja': '偽りの軟鞭', 'ko': '가짜 연편'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '枯木禪杖', 'en': 'Withered Staff', 'ja': '枯木禅杖', 'ko': '고목선장'}, icon:'🪵', decoyName: {'zh': '普通木柴(贗品)', 'en': 'Fake Staff', 'ja': '偽りの枯木禅杖', 'ko': '가짜 고목선장'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '打神鞭', 'en': 'God Whip', 'ja': '打神鞭', 'ko': '타신편'}, icon:'⚡', decoyName: {'zh': '普通雷擊木(贗品)', 'en': 'Fake God Whip', 'ja': '偽りの打神鞭', 'ko': '가짜 타신편'}, isDistinctDecoy: false}
+                ]
+            },
+            { 
+                theme: "金庸江湖密寶", 
+                riddle: {
+                    'zh': '✨ 謎語：江湖密寶暗藏殺機，鐵算盤與金針各顯神通！', 
+                    'en': '✨ Riddle: Hidden treasures and lethal hidden weapons of Jianghu.', 
+                    'ja': '✨ 謎解き：江湖の秘宝と隠し武器を探せ！', 
+                    'ko': '✨ 수수께끼: 강호의 숨겨진 비보와 암기를 찾으세요!'
+                },
+                items: [
+                    {name:{'zh': '血刀', 'en': 'Blood Saber', 'ja': '血刀', 'ko': '혈도'}, icon:'🩸', decoyName: {'zh': '仿冒血刀(贗品)', 'en': 'Fake Blood Saber', 'ja': '偽りの血刀', 'ko': '가짜 혈도'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '蝴蝶鏢', 'en': 'Butterfly Dart', 'ja': '蝶の鏢', 'ko': '호접표'}, icon:'🦋', decoyName: {'zh': '仿冒蝴蝶鏢(贗品)', 'en': 'Fake Dart', 'ja': '偽りの蝶の鏢', 'ko': '가짜 호접표'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '鐵茶壺', 'en': 'Iron Teapot', 'ja': '鉄の急須', 'ko': '철다주'}, icon:'🫖', decoyName: {'zh': '普通茶壺(贗品)', 'en': 'Fake Teapot', 'ja': '偽りの鉄の急須', 'ko': '가짜 철다주'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '繡花針', 'en': 'Embroidery Needle', 'ja': '刺繍針', 'ko': '자수바늘'}, icon:'📍', decoyName: {'zh': '普通縫衣針(贗品)', 'en': 'Fake Needle', 'ja': '偽りの刺繍針', 'ko': '가짜 자수바늘'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '玉蜂針', 'en': 'Jade Bee Needle', 'ja': '玉蜂の針', 'ko': '옥봉침'}, icon:'🐝', decoyName: {'zh': '普通蜂針(贗品)', 'en': 'Fake Bee Needle', 'ja': '偽りの玉蜂の針', 'ko': '가짜 옥봉침'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '鐵算盤', 'en': 'Iron Abacus', 'ja': '鉄のそろばん', 'ko': '철주판'}, icon:'🔢', decoyName: {'zh': '普通木算盤(贗品)', 'en': 'Fake Abacus', 'ja': '偽りの鉄のそろばん', 'ko': '가짜 철주판'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '青光劍', 'en': 'Cyan Sword', 'ja': '青光の剣', 'ko': '청광검'}, icon:'🗡️', decoyName: {'zh': '仿冒青光劍(贗品)', 'en': 'Fake Cyan Sword', 'ja': '偽りの青光の剣', 'ko': '가짜 청광검'}, isDistinctDecoy: false}
+                ]
+            },
+            { 
+                theme: "金庸絕學神兵", 
+                riddle: {
+                    'zh': '✨ 謎語：琴韻蕭聲響徹武林，絕學神兵震撼四方！', 
+                    'en': '✨ Riddle: Melodies of zithers and martial arts supreme.', 
+                    'ja': '✨ 謎解き：武林に響く琴と簫の音、絶妙な神兵を探せ！', 
+                    'ko': '✨ 수수께끼: 무림을 울리는 악기와 최강의 신병을 찾으세요!'
+                },
+                items: [
+                    {name:{'zh': '鐵琴', 'en': 'Iron Zither', 'ja': '鉄の琴', 'ko': '철금'}, icon:'🎸', decoyName: {'zh': '普通吉他(贗品)', 'en': 'Fake Zither', 'ja': '偽りの鉄の琴', 'ko': '가짜 철금'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '銀索金鈴', 'en': 'Silver Cord & Bells', 'ja': '銀索金鈴', 'ko': '은색끈과 금방울'}, icon:'🔔', decoyName: {'zh': '普通銅鈴(贗品)', 'en': 'Fake Bells', 'ja': '偽りの銀索金鈴', 'ko': '가짜 은색끈과 금방울'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '鐵蕭', 'en': 'Iron Xiao', 'ja': '鉄の洞簫', 'ko': '철소'}, icon:'🎶', decoyName: {'zh': '普通竹笛(贗品)', 'en': 'Fake Xiao', 'ja': '偽りの鉄の洞簫', 'ko': '가짜 철소'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '五毒袋', 'en': 'Five Poisons Bag', 'ja': '五毒の袋', 'ko': '오독주머니'}, icon:'🟣', decoyName: {'zh': '普通布袋(贗品)', 'en': 'Fake Bag', 'ja': '偽りの五毒の袋', 'ko': '가짜 오독주머니'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '龍爪手套', 'en': 'Dragon Claw Gloves', 'ja': '竜爪の手袋', 'ko': '용조장갑'}, icon:'🥊', decoyName: {'zh': '普通拳套(贗品)', 'en': 'Fake Gloves', 'ja': '偽りの竜爪の手袋', 'ko': '가짜 용조장갑'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '伏虎杖', 'en': 'Tiger-Taming Staff', 'ja': '伏虎の杖', 'ko': '복호장'}, icon:'🦯', decoyName: {'zh': '普通手杖(贗品)', 'en': 'Fake Staff', 'ja': '偽りの伏虎の杖', 'ko': '가짜 복호장'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '逍遙扇', 'en': 'Xiaoyao Fan', 'ja': '逍遙の扇', 'ko': '소요선'}, icon:'🪭', decoyName: {'zh': '普通紙扇(贗品)', 'en': 'Fake Fan', 'ja': '偽りの逍遙の扇', 'ko': '가짜 소요선'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '碧水劍', 'en': 'Clear Water Sword', 'ja': '碧水の剣', 'ko': '벽수검'}, icon:'⚔️', decoyName: {'zh': '仿冒碧水劍(贗品)', 'en': 'Fake Water Sword', 'ja': '偽りの碧水の剣', 'ko': '가짜 벽수검'}, isDistinctDecoy: false}
+                ]
+            },
+            { 
+                theme: "哈利波特魔法開啟", 
+                riddle: {
+                    'zh': '✨ 謎語：戴上會說話的帽子，拿起傳說中的老魔杖進入霍格華茲！', 
+                    'en': '✨ Riddle: Put on the talking hat and wield the Elder Wand.', 
+                    'ja': '✨ 謎解き：喋る帽子を被り、最強の杖を手に取ろう！', 
+                    'ko': '✨ 수수께끼: 말하는 모자를 쓰고 가장 강력한 지팡이를 찾으세요!'
+                },
+                items: [
+                    {name:{'zh': '分類帽', 'en': 'Sorting Hat', 'ja': '組分け帽子', 'ko': '기숙사 배정 모자'}, icon:'🧙‍♂️', decoyName: {'zh': '普通魔法帽(贗品)', 'en': 'Fake Sorting Hat', 'ja': '偽りの組分け帽子', 'ko': '가짜 모자'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '隱形斗篷', 'en': 'Invisibility Cloak', 'ja': '透明マント', 'ko': '투명 망토'}, icon:'🧥', decoyName: {'zh': '普通黑斗篷(贗品)', 'en': 'Fake Cloak', 'ja': '偽りの透明マント', 'ko': '가짜 망토'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '劫盜地圖', 'en': 'Marauder\'s Map', 'ja': '忍びの地図', 'ko': '마로더의 지도'}, icon:'📜', decoyName: {'zh': '普通羊皮紙(贗品)', 'en': 'Fake Map', 'ja': '偽りの忍びの地図', 'ko': '가짜 지도'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '老魔杖', 'en': 'Elder Wand', 'ja': 'ニワウトの杖', 'ko': '딱나무 지팡이'}, icon:'🪄', decoyName: {'zh': '普通學生魔杖(贗品)', 'en': 'Fake Wand', 'ja': '偽りの杖', 'ko': '가짜 지팡이'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '咆哮信', 'en': 'Howler', 'ja': '吼え手', 'ko': '울보 편지'}, icon:'💌', decoyName: {'zh': '普通信封(贗品)', 'en': 'Fake Howler', 'ja': '偽りの吼え手', 'ko': '가짜 편지'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '儲思盆', 'en': 'Pensieve', 'ja': '憂いの篩', 'ko': '펜시브'}, icon:'🥣', decoyName: {'zh': '普通石盆(贗品)', 'en': 'Fake Pensieve', 'ja': '偽りの憂いの篩', 'ko': '가짜 대야'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '火閃電掃帚', 'en': 'Firebolt Broom', 'ja': 'ファイアボルト', 'ko': '파이어볼트 빗자루'}, icon:'🧹', decoyName: {'zh': '普通掃帚(贗品)', 'en': 'Fake Broom', 'ja': '偽りのほうき', 'ko': '가짜 빗자루'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '意若思鏡', 'en': 'Mirror of Erised', 'ja': 'みぞの鏡', 'ko': '소망의 거울'}, icon:'🪞', decoyName: {'zh': '普通穿衣鏡(贗品)', 'en': 'Fake Mirror', 'ja': '偽りの鏡', 'ko': '가짜 거울'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '記憶球', 'en': 'Remembrall', 'ja': '思い出し玉', 'ko': '기억을 돕는 공'}, icon:'🔮', decoyName: {'zh': '普通水晶球(贗品)', 'en': 'Fake Crystal Ball', 'ja': '偽りの水晶玉', 'ko': '가짜 수정구'}, isDistinctDecoy: false}
+                ]
+            },
+            { 
+                theme: "哈利波特神祕道具", 
+                riddle: {
+                    'zh': '✨ 謎語：飛路粉閃爍綠光，巧克力蛙跳出包裝！', 
+                    'en': '✨ Riddle: Floo powder greens and jumping chocolate frogs.', 
+                    'ja': '✨ 謎解き：緑の炎が燃え上がる飛路粉とチョコレートの蛙！', 
+                    'ko': '✨ 수수께끼: 초록빛 플루 가루와 뛰노는 초콜릿 개구리를 찾으세요!'
+                },
+                items: [
+                    {name:{'zh': '復活石', 'en': 'Resurrection Stone', 'ja': '蘇りの石', 'ko': '부활의 돌'}, icon:'💍', decoyName: {'zh': '普通戒指(贗品)', 'en': 'Fake Stone Ring', 'ja': '偽りの石の指輪', 'ko': '가짜 반지'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '鳳凰羽毛', 'en': 'Phoenix Feather', 'ja': '不死鳥の羽', 'ko': '불사조 깃털'}, icon:'🪶', decoyName: {'zh': '普通羽毛(贗品)', 'en': 'Fake Feather', 'ja': '偽りの羽', 'ko': '가짜 깃털'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '大釜', 'en': 'Cauldron', 'ja': '大釜', 'ko': '가루드론 (냄비)'}, icon:'🍲', decoyName: {'zh': '普通鐵鍋(贗品)', 'en': 'Fake Cauldron', 'ja': '偽りの大釜', 'ko': '가짜 냄비'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '飛路粉', 'en': 'Floo Powder', 'ja': 'ヘンゲ粉', 'ko': '플루 가루'}, icon:'✨', decoyName: {'zh': '普通魔法粉末(贗品)', 'en': 'Fake Powder', 'ja': '偽りの粉', 'ko': '가짜 가루'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '魔法棋子', 'en': 'Wizard Chess Piece', 'ja': '魔法のチェス駒', 'ko': '마법 체스 말'}, icon:'♟️', decoyName: {'zh': '普通棋子(贗品)', 'en': 'Fake Chess Piece', 'ja': '偽りのチェス駒', 'ko': '가짜 체스말'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '熄燈器', 'en': 'Deluminator', 'ja': 'パイロメータ (消し器)', 'ko': '소등기'}, icon:'💡', decoyName: {'zh': '普通打火機(贗品)', 'en': 'Fake Deluminator', 'ja': '偽りの消し器', 'ko': '가짜 소등기'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '巧克力蛙', 'en': 'Chocolate Frog', 'ja': 'カエルチョコレート', 'ko': '개구리 초콜릿'}, icon:'🍫', decoyName: {'zh': '普通巧克力(贗品)', 'en': 'Fake Frog', 'ja': '偽りのカエルチョコ', 'ko': '가짜 초콜릿'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '怪獸的怪獸書', 'en': 'Monster Book of Monsters', 'ja': '怪物たちの怪物本', 'ko': '괴물들의 괴물 책'}, icon:'📖', decoyName: {'zh': '普通魔法書(贗品)', 'en': 'Fake Monster Book', 'ja': '偽りの怪物本', 'ko': '가짜 마법책'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '葛萊芬多寶劍', 'en': 'Sword of Gryffindor', 'ja': 'グリフィンドールの剣', 'ko': '그리핀도르의 검'}, icon:'⚔️', decoyName: {'zh': '仿冒葛萊芬多劍(贗品)', 'en': 'Fake Gryffindor Sword', 'ja': '偽りの剣', 'ko': '가짜 검'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '魔法骰子', 'en': 'Magical Dice', 'ja': '魔法のサイコロ', 'ko': '마법 주사위'}, icon:'🎲', decoyName: {'zh': '普通骰子(贗品)', 'en': 'Fake Dice', 'ja': '偽りのサイコロ', 'ko': '가짜 주사위'}, isDistinctDecoy: false}
+                ]
+            },
+            { 
+                theme: "哈利波特分靈體與魁地奇", 
+                riddle: {
+                    'zh': '✨ 謎語：金色飛翼在空中閃爍，神祕的分靈體隱藏在各處！', 
+                    'en': '✨ Riddle: Golden wings fluttering and dark horcruxes hidden away.', 
+                    'ja': '✨ 謎解き：空を飛ぶ金色のスニッチと隠された分霊箱！', 
+                    'ko': '✨ 수수께끼: 날개 돋힌 골든 스니치와 숨겨진 호크룩스를 찾으세요!'
+                },
+                items: [
+                    {name:{'zh': '時光器', 'en': 'Time-Turner', 'ja': '逆転時計', 'ko': '타임 터너'}, icon:'⏳', decoyName: {'zh': '普通沙漏(贗品)', 'en': 'Fake Time-Turner', 'ja': '偽りの逆転時計', 'ko': '가짜 모래시계'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '金探子', 'en': 'Golden Snitch', 'ja': '金のスニッチ', 'ko': '골든 스니치'}, icon:'🟡', decoyName: {'zh': '仿冒金探子(贗品)', 'en': 'Fake Snitch', 'ja': '偽りのスニッチ', 'ko': '가짜 스니치'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '日記本分靈體', 'en': 'Tom Riddle\'s Diary', 'ja': 'トム・リドルの日記', 'ko': '톰 리들의 일기장'}, icon:'📓', decoyName: {'zh': '普通筆記本(贗品)', 'en': 'Fake Diary', 'ja': '偽りの日記', 'ko': '가짜 일기장'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '三巫獎盃', 'en': 'Triwizard Cup', 'ja': '三大魔法学校対抗試合の優勝杯', 'ko': '트리위저드 우승컵'}, icon:'🏅', decoyName: {'zh': '普通獎盃(贗品)', 'en': 'Fake Triwizard Cup', 'ja': '偽りの優勝杯', 'ko': '가짜 우승컵'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '瘋眼魔眼', 'en': 'Mad-Eye\'s Magical Eye', 'ja': 'マッドアイの義眼', 'ko': '매드아이의 마안'}, icon:'👁️', decoyName: {'zh': '普通玻璃眼(贗品)', 'en': 'Fake Magical Eye', 'ja': '偽りの義眼', 'ko': '가짜 의안'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '赫夫帕夫金盃', 'en': 'Hufflepuff\'s Cup', 'ja': 'ハッフルパフのカップ', 'ko': '후플푸프의 컵'}, icon:'🏺', decoyName: {'zh': '普通酒杯(贗品)', 'en': 'Fake Hufflepuff Cup', 'ja': '偽りのカップ', 'ko': '가짜 컵'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '雷文克勞皇冠', 'en': 'Ravenclaw\'s Diadem', 'ja': 'レイブンクローの髪飾り', 'ko': '래븐클로의 보관'}, icon:'👑', decoyName: {'zh': '普通王冠(贗品)', 'en': 'Fake Diadem', 'ja': '偽りの髪飾り', 'ko': '가짜 왕관'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '史萊哲林金匣', 'en': 'Slytherin\'s Locket', 'ja': 'スリザリンのロケット', 'ko': '슬리데린의 로켓'}, icon:'🟢', decoyName: {'zh': '普通項鍊盒(贗品)', 'en': 'Fake Locket', 'ja': '偽りのロケット', 'ko': '가짜 로켓'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '魁地奇快浮', 'en': 'Quaffle', 'ja': 'クアッフル', 'ko': '퀘이플'}, icon:'⚽', decoyName: {'zh': '普通紅球(贗品)', 'en': 'Fake Quaffle', 'ja': '偽りのクアッフル', 'ko': '가짜 퀘이플'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '魁地奇搏格', 'en': 'Bludger', 'ja': 'ブラッジャー', 'ko': '블러저'}, icon:'⚫', decoyName: {'zh': '仿冒搏格(危險贗品)', 'en': 'Fake Bludger', 'ja': '偽りのブラッジャー', 'ko': '가짜 블러저'}, isDistinctDecoy: true, customIcon: '🟤'}, 
+                    {name:{'zh': '級長徽章', 'en': 'Prefect Badge', 'ja': '監督生のバッジ', 'ko': '반장 배지'}, icon:'⭐', decoyName: {'zh': '普通徽章(贗品)', 'en': 'Fake Badge', 'ja': '偽りのバッジ', 'ko': '가짜 배지'}, isDistinctDecoy: false}
+                ]
+            },
+            { 
+                theme: "哈利波特奇獸與魔法書", 
+                riddle: {
+                    'zh': '✨ 謎語：鷹馬展翅翱翔，混血王子的魔藥書記載著神祕咒語！', 
+                    'en': '✨ Riddle: Hippogriffs in flight and potions of the Half-Blood Prince.', 
+                    'ja': '✨ 謎解き：空を駆けるヒッポグリフと混血の王子の教科書！', 
+                    'ko': '✨ 수수께끼: 히포그리프와 혼혈 왕자의 마법약 교과서를 찾으세요!'
+                },
+                items: [
+                    {name:{'zh': '鷹馬羽毛', 'en': 'Hippogriff Feather', 'ja': 'ヒッポグリフの羽', 'ko': '히포그리프의 깃털'}, icon:'🪶', decoyName: {'zh': '普通鳥羽(贗品)', 'en': 'Fake Feather', 'ja': '偽りの羽', 'ko': '가짜 깃털'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '墜鬼馬面具', 'en': 'Thestral Mask', 'ja': 'セストラルのお面', 'ko': '세스트랄 가면'}, icon:'🐴', decoyName: {'zh': '普通馬面具(贗品)', 'en': 'Fake Mask', 'ja': '偽りのお面', 'ko': '가짜 가면'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '催狂魔斗篷', 'en': 'Dementor Cloak', 'ja': 'ディメンターのマント', 'ko': '디멘터의 망토'}, icon:'👻', decoyName: {'zh': '普通破布(贗品)', 'en': 'Fake Cloak', 'ja': '偽りのマント', 'ko': '가짜 망토'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '混血王子魔藥書', 'en': 'Half-Blood Prince Book', 'ja': '混血の王子の薬学書', 'ko': '혼혈 왕자의 마법약 책'}, icon:'📖', decoyName: {'zh': '普通筆記簿(贗品)', 'en': 'Fake Potion Book', 'ja': '偽りの薬学書', 'ko': '가짜 책'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '預言家日報', 'en': 'Daily Prophet', 'ja': '予言者日新聞', 'ko': '예언자 일보'}, icon:'📰', decoyName: {'zh': '普通報紙(贗品)', 'en': 'Fake Prophet', 'ja': '偽りの新聞', 'ko': '가짜 신문'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '牙牙項圈', 'en': 'Fang\'s Collar', 'ja': 'ファングの首輪', 'ko': '팽의 목줄'}, icon:'🐕', decoyName: {'zh': '普通狗項圈(贗品)', 'en': 'Fake Collar', 'ja': '偽りの首輪', 'ko': '가짜 목줄'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '水晶水龍頭', 'en': 'Crystal Faucet', 'ja': 'クリスタルの蛇口', 'ko': '수정 수도꼭지'}, icon:'🚿', decoyName: {'zh': '普通水龍頭(贗品)', 'en': 'Fake Faucet', 'ja': '偽りの蛇口', 'ko': '가짜 수도꼭지'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '魔法糖果豆', 'en': 'Bertie Bott\'s Beans', 'ja': 'バーティー・ボッツの百味ビーンズ', 'ko': '모든 맛이 나는 강낭콩젤리'}, icon:'🍬', decoyName: {'zh': '普通豆子(贗品)', 'en': 'Fake Beans', 'ja': '偽りのビーンズ', 'ko': '가짜 젤리'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '入學信件', 'en': 'Hogwarts Acceptance Letter', 'ja': 'ホグワーツ入学許可証', 'ko': '호그와트 입학 허가서'}, icon:'✉️', decoyName: {'zh': '普通信紙(贗品)', 'en': 'Fake Letter', 'ja': '偽りの許可証', 'ko': '가짜 편지'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '變形黑板', 'en': 'Transfiguration Board', 'ja': '変身術の黒板', 'ko': '변신술 칠판'}, icon:'🖍️', decoyName: {'zh': '普通黑板(贗品)', 'en': 'Fake Board', 'ja': '偽りの黒板', 'ko': '가짜 칠판'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '提燈', 'en': 'Caretaker\'s Lantern', 'ja': '管理人フィルフのランタン', 'ko': '필치의 랜턴'}, icon:'🏮', decoyName: {'zh': '普通燈籠(贗品)', 'en': 'Fake Lantern', 'ja': '偽りのランタン', 'ko': '가짜 랜턴'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '防禦咒語書', 'en': 'Defense Spell Book', 'ja': '闇の魔術に対する防衛術の本', 'ko': '어둠의 마법 방어술 책'}, icon:'🛡️', decoyName: {'zh': '普通厚書(贗品)', 'en': 'Fake Spell Book', 'ja': '偽りの防衛術の本', 'ko': '가짜 책'}, isDistinctDecoy: false}
+                ]
+            },
+            { 
+                theme: "哈利波特死神聖物大結局", 
+                riddle: {
+                    'zh': '✨ 謎語：死神聖物齊聚，9又3/4月台將通往最終的勝利！', 
+                    'en': '✨ Riddle: The Deathly Hallows unite for the final battle.', 
+                    'ja': '✨ 謎解き：死の秘宝が集結し、9と3/4番線へ！', 
+                    'ko': '✨ 수수께끼: 죽음의 성물이 모이고 9와 4분의 3 승강장으로 향합니다!'
+                },
+                items: [
+                    {name:{'zh': '死神聖物標誌', 'en': 'Deathly Hallows Symbol', 'ja': '死の秘宝のシンボル', 'ko': '죽음의 성물 심볼'}, icon:'🔺', decoyName: {'zh': '普通三角標誌(贗品)', 'en': 'Fake Symbol', 'ja': '偽りのシンボル', 'ko': '가짜 심볼'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '復活石戒指', 'en': 'Resurrection Ring', 'ja': '蘇りの石の指輪', 'ko': '부활의 반지'}, icon:'💍', decoyName: {'zh': '仿冒復活戒(贗品)', 'en': 'Fake Resurrection Ring', 'ja': '偽りの指輪', 'ko': '가짜 반지'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '斗篷扣環', 'en': 'Cloak Clasp', 'ja': 'マントの留め具', 'ko': '망토 걸고리'}, icon:'⚓', decoyName: {'zh': '普通船錨(贗品)', 'en': 'Fake Clasp', 'ja': '偽りの留め具', 'ko': '가짜 고리'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '寶劍劍柄', 'en': 'Sword Hilt', 'ja': '剣の柄', 'ko': '검자루'}, icon:'🗡️', decoyName: {'zh': '普通劍柄(贗品)', 'en': 'Fake Hilt', 'ja': '偽りの柄', 'ko': '가짜 검자루'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '金盃把手', 'en': 'Cup Handle', 'ja': 'カップの取っ手', 'ko': '컵 손잡이'}, icon:'🏆', decoyName: {'zh': '普通杯把(贗品)', 'en': 'Fake Handle', 'ja': '偽りの取っ手', 'ko': '가짜 손잡이'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '皇冠寶石', 'en': 'Diadem Gem', 'ja': '冠の宝石', 'ko': '보관 보석'}, icon:'💎', decoyName: {'zh': '普通寶石(贗品)', 'en': 'Fake Gem', 'ja': '偽りの宝石', 'ko': '가짜 보석'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '金匣鎖頭', 'en': 'Locket Latch', 'ja': 'ロケットの留め金', 'ko': '로켓 잠금장치'}, icon:'🔒', decoyName: {'zh': '普通鎖頭(贗品)', 'en': 'Fake Latch', 'ja': '偽りの留め金', 'ko': '가짜 잠금장치'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '佛地魔魔杖', 'en': 'Voldemort\'s Wand', 'ja': 'ヴォルデモートの杖', 'ko': '볼드모트의 지팡이'}, icon:'🪄', decoyName: {'zh': '仿冒黑魔杖(贗品)', 'en': 'Fake Voldemort Wand', 'ja': '偽りの杖', 'ko': '가짜 지팡이'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '火車頭標誌', 'en': 'Hogwarts Express Engine', 'ja': 'ホグワーツ特急の機関車', 'ko': '호그와트 특급열차 기관차'}, icon:'🚂', decoyName: {'zh': '普通火車(贗品)', 'en': 'Fake Engine', 'ja': '偽りの機関車', 'ko': '가짜 기차'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '9又3/4月台', 'en': 'Platform 9¾', 'ja': '9と3/4番線', 'ko': '9와 4분의 3 승강장'}, icon:'🧱', decoyName: {'zh': '普通紅磚牆(贗品)', 'en': 'Fake Platform', 'ja': '偽りの番線', 'ko': '가짜 승강장'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '鳳凰會標誌', 'en': 'Order of the Phoenix', 'ja': '不死鳥の騎士団のシンボル', 'ko': '불사조 기사단 심볼'}, icon:'🔥', decoyName: {'zh': '普通火焰(贗品)', 'en': 'Fake Phoenix', 'ja': '偽りの炎', 'ko': '가짜 불꽃'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '黑魔標記', 'en': 'Dark Mark', 'ja': '闇の印', 'ko': '어둠의 표식'}, icon:'💀', decoyName: {'zh': '普通骷髏(贗品)', 'en': 'Fake Dark Mark', 'ja': '偽りの印', 'ko': '가짜 표식'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '最終魔法王冠', 'en': 'Ultimate Crown', 'ja': '究極の魔法の冠', 'ko': '궁극의 마법 왕관'}, icon:'👑', decoyName: {'zh': '仿冒王冠(贗品)', 'en': 'Fake Crown', 'ja': '偽りの王冠', 'ko': '가짜 왕관'}, isDistinctDecoy: false}
+                ]
+            }
+        ];
+
+        let player = { codename: '', gender: '', country: '', difficulty: 'normal', hasShield: true };
+        let currentLang = 'zh-TW';
+        let currentLevel = 0;
+        let maxUnlockedLevel = 0; // 記錄玩家目前解鎖到的最高關卡
+        let score = 0;
+        let timer = 0;
+        let totalGameTime = 0;
+        let timerInterval = null;
+        let currentItems = [];
+        let nextTargetIndex = 0;
+        let collectedArtifacts = {};
+        let encounterTriggered = false;
+
+        let quizQuestions = [];
+        let currentQuizIndex = 0;
+        let quizScore = 0;
+
+        let audioCtx = null;
+        let isMusicPlaying = false;
+        let musicInterval = null;
+
+        function toggleBackgroundMusic() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            if (isMusicPlaying) {
+                clearInterval(musicInterval);
+                isMusicPlaying = false;
+                document.getElementById('audioToggleBtn').style.opacity = '0.6';
+            } else {
+                isMusicPlaying = true;
+                document.getElementById('audioToggleBtn').style.opacity = '1';
+                playMusicLoop();
+            }
+        }
+
+        function playMusicLoop() {
+            const notes = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25];
+            musicInterval = setInterval(() => {
+                if (!isMusicPlaying || !audioCtx) return;
+                let note = notes[Math.floor(Math.random() * notes.length)];
+                playTone(note, 0.4, 'sine');
+            }, 600);
+        }
+
+        function playTone(freq, duration, type = 'sine') {
+            if (!audioCtx) return;
+            try {
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch(e) {}
+        }
+
+        window.onload = function() {
+            const startBtn = document.getElementById('startBtn');
+            const nextBtn = document.getElementById('nextLevelBtn');
+            const langSelect = document.getElementById('langSelect');
+            const countrySelect = document.getElementById('playerCountry');
+            const encyclopediaBtn = document.getElementById('encyclopediaBtn');
+            const backToSetupBtn = document.getElementById('backToSetupBtn');
+            const hintBtn = document.getElementById('hintBtn');
+            const audioToggleBtn = document.getElementById('audioToggleBtn');
+            const startQuizDirectBtn = document.getElementById('startQuizDirectBtn');
+
+            if (startBtn) startBtn.addEventListener('click', startGame);
+            if (nextBtn) nextBtn.addEventListener('click', nextLevel);
+            if (langSelect) langSelect.addEventListener('change', changeLanguage);
+            if (encyclopediaBtn) encyclopediaBtn.addEventListener('click', openEncyclopedia);
+            if (backToSetupBtn) backToSetupBtn.addEventListener('click', closeEncyclopedia);
+            if (hintBtn) hintBtn.addEventListener('click', useHint);
+            if (audioToggleBtn) audioToggleBtn.addEventListener('click', toggleBackgroundMusic);
+            if (startQuizDirectBtn) startQuizDirectBtn.addEventListener('click', executeGrandmasterQuiz);
+            
+            if (countrySelect) {
+                countrySelect.addEventListener('change', function() {
+                    let country = this.value;
+                    let targetLang = 'zh-TW';
+                    if (country === 'Japan') targetLang = 'ja';
+                    else if (country === 'South Korea') targetLang = 'ko';
+                    else if (country !== 'Taiwan' && country !== 'China') targetLang = 'en';
+
+                    const langSel = document.getElementById('langSelect');
+                    if (langSel) {
+                        langSel.value = targetLang;
+                        changeLanguage();
+                    }
+                });
+            }
+        };
+
+        function changeLanguage() {
+            const langSelect = document.getElementById('langSelect');
+            if (!langSelect) return;
+            currentLang = langSelect.value;
+            const dict = i18n[currentLang];
+            if (!dict) return;
+
+            document.getElementById('appTitle').innerText = dict.appTitle;
+            document.getElementById('heroTitle').innerText = dict.heroTitle;
+            document.getElementById('heroDesc').innerText = dict.heroDesc;
+            document.getElementById('setupTitle').innerText = dict.setupTitle;
+            document.getElementById('labelCodename').innerText = dict.labelCodename;
+            document.getElementById('labelGender').innerText = dict.labelGender;
+            document.getElementById('optMale').innerText = dict.optMale;
+            document.getElementById('optFemale').innerText = dict.optFemale;
+            document.getElementById('optOther').innerText = dict.optOther;
+            document.getElementById('labelCountry').innerText = dict.labelCountry;
+            document.getElementById('labelDifficulty').innerText = dict.labelDifficulty;
+            document.getElementById('labelShield').innerText = dict.labelShield;
+            document.getElementById('diffNovice').innerText = dict.diffNovice;
+            document.getElementById('diffEasy').innerText = dict.diffEasy;
+            document.getElementById('diffNormal').innerText = dict.diffNormal;
+            document.getElementById('diffHard').innerText = dict.diffHard;
+            document.getElementById('diffMaster').innerText = dict.diffMaster;
+            document.getElementById('startBtn').innerText = dict.startBtn;
+            document.getElementById('encyclopediaBtn').innerText = dict.encyclopediaBtn;
+            document.getElementById('encyclopediaTitle').innerText = dict.encyclopediaTitle;
+            document.getElementById('encyclopediaDesc').innerText = dict.encyclopediaDesc;
+            document.getElementById('backToSetupBtn').innerText = dict.backToSetupBtn;
+            document.getElementById('hintBtn').innerText = dict.hintBtnText;
+            document.getElementById('quizHeader').innerText = dict.quizHeader;
+            document.getElementById('quizInstructions').innerText = dict.quizInstructions;
+
+            if (document.getElementById('gameScreen').style.display === 'flex') {
+                updateChecklistTitle();
+                renderChecklist();
+                updateRiddleText();
+            }
+        }
+
+        function startGame(event) {
+            if (event) event.preventDefault();
+            playTone(440, 0.2);
+
+            const nameInput = document.getElementById('playerCodename');
+            const genderSelect = document.getElementById('playerGender');
+            const countrySelect = document.getElementById('playerCountry');
+            const diffSelect = document.getElementById('playerDifficulty');
+            const shieldCheckbox = document.getElementById('useShield');
+
+            let nameVal = nameInput ? nameInput.value.trim() : '';
+            player.codename = nameVal !== '' ? nameVal : (['en','ja','ko'].includes(currentLang) ? 'Adventurer' : '無名俠客');
+            player.gender = genderSelect ? genderSelect.value : 'male';
+            player.country = countrySelect ? countrySelect.value : 'Taiwan';
+            player.difficulty = diffSelect ? diffSelect.value : 'normal';
+            player.hasShield = shieldCheckbox ? shieldCheckbox.checked : true;
+
+            if (player.country === 'Japan') currentLang = 'ja';
+            else if (player.country === 'South Korea') currentLang = 'ko';
+            else if (player.country !== 'Taiwan' && player.country !== 'China') currentLang = 'en';
+            else currentLang = 'zh-TW';
+
+            const langSel = document.getElementById('langSelect');
+            if (langSel) langSel.value = currentLang;
+            changeLanguage();
+
+            document.getElementById('setupScreen').style.display = 'none';
+            document.getElementById('gameScreen').style.display = 'flex';
+
+            const shieldStatus = document.getElementById('shieldStatus');
+            if (shieldStatus) {
+                shieldStatus.innerText = player.hasShield ? '🛡️ 已啟動' : '❌ 未攜帶';
+                shieldStatus.style.color = player.hasShield ? '#16a34a' : '#dc2626';
+            }
+
+            currentLevel = 0;
+            maxUnlockedLevel = 0; // 重置解鎖進度，強制從第1關開始
+            score = 0;
+            totalGameTime = 0;
+            document.getElementById('score').innerText = score;
+            initGame();
+        }
+
+        function openEncyclopedia() {
+            playTone(523.25, 0.15);
+            document.getElementById('setupScreen').style.display = 'none';
+            document.getElementById('encyclopediaScreen').style.display = 'block';
+            renderEncyclopediaGrid();
+        }
+
+        function closeEncyclopedia() {
+            playTone(392, 0.15);
+            document.getElementById('encyclopediaScreen').style.display = 'none';
+            document.getElementById('setupScreen').style.display = 'block';
+        }
+
+        function renderEncyclopediaGrid() {
+            const grid = document.getElementById('encyclopediaGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            let langKey = 'zh';
+            if (currentLang === 'en') langKey = 'en';
+            else if (currentLang === 'ja') langKey = 'ja';
+            else if (currentLang === 'ko') langKey = 'ko';
+
+            levelsData.forEach((lvl, lvlIdx) => {
+                lvl.items.forEach(item => {
+                    let itemName = item.name[langKey] || item.name['en'] || item.name['zh'];
+                    let isCollected = collectedArtifacts[itemName];
+                    const div = document.createElement('div');
+                    div.className = `encyclopedia-item ${isCollected ? '' : 'locked'}`;
+                    div.innerHTML = `<div style="font-size: 1.5rem;">${item.icon}</div><div><b>${isCollected ? itemName : '???'}</b></div><div style="font-size:0.75rem; color:#64748b;">${lvl.theme}</div>`;
+                    grid.appendChild(div);
+                });
+            });
+        }
+
+        function useHint() {
+            playTone(659.25, 0.2);
+            let targetObj = currentItems[nextTargetIndex];
+            if (!targetObj) return;
+
+            const roomScene = document.getElementById('roomScene');
+            if (!roomScene) return;
+            const objects = roomScene.querySelectorAll('.room-object');
+            objects.forEach(el => {
+                if (el.innerText === targetObj.icon && !el.classList.contains('collected') && !el.classList.contains('decoy-item')) {
+                    el.classList.add('hint-glow');
+                    setTimeout(() => el.classList.remove('hint-glow'), 2000);
+                }
+            });
+        }
+
+        function initGame() {
+            renderLevelSelector();
+            loadLevel(currentLevel);
+        }
+
+        function renderLevelSelector() {
+            const panel = document.getElementById('levelSelectPanel');
+            if (!panel) return;
+            panel.innerHTML = '';
+            levelsData.forEach((lvl, idx) => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                
+                // 檢查該關卡是否已解鎖
+                let isLocked = idx > maxUnlockedLevel;
+                btn.className = `level-btn ${idx === currentLevel ? 'active' : ''} ${isLocked ? 'locked' : ''}`;
+                btn.innerText = (currentLang === 'en' || currentLang === 'ja' || currentLang === 'ko') ? `Lv ${idx + 1}` : `第 ${idx + 1} 關`;
+                
+                btn.onclick = () => {
+                    if (isLocked) {
+                        const dict = i18n[currentLang];
+                        alert(dict.lockedLevelAlert);
+                        return;
+                    }
+                    playTone(493.88, 0.1);
+                    currentLevel = idx;
+                    loadLevel(currentLevel);
+                };
+                panel.appendChild(btn);
+            });
+        }
+
+        function loadLevel(levelIdx) {
+            currentLevel = levelIdx;
+            nextTargetIndex = 0;
+            encounterTriggered = false;
+            const winModal = document.getElementById('winModal');
+            if (winModal) winModal.style.display = 'none';
+            const certContainer = document.getElementById('certificateContainer');
+            if (certContainer) certContainer.innerHTML = '';
+
+            updateChecklistTitle();
+            updateRiddleText();
+
+            if (timerInterval) clearInterval(timerInterval);
+            timer = 0;
+            timerInterval = setInterval(() => {
+                timer++;
+                totalGameTime++;
+                const timerEl = document.getElementById('timer');
+                if (timerEl) timerEl.innerText = timer;
+
+                if (!encounterTriggered && timer === 15 && Math.random() > 0.3) {
+                    encounterTriggered = true;
+                    triggerEncounter();
+                }
+            }, 1000);
+
+            let rawItems = levelsData[levelIdx].items;
+            let sliceCount = rawItems.length;
+            if (player.difficulty === 'novice') {
+                sliceCount = Math.max(2, Math.ceil(rawItems.length * 0.5));
+            } else if (player.difficulty === 'easy') {
+                sliceCount = Math.max(3, Math.ceil(rawItems.length * 0.7));
+            } else if (player.difficulty === 'normal') {
+                sliceCount = Math.max(4, Math.ceil(rawItems.length * 0.8));
+            } else if (player.difficulty === 'hard') {
+                sliceCount = Math.max(4, Math.ceil(rawItems.length * 0.9));
+            }
+
+            let langKey = 'zh';
+            if (currentLang === 'en') langKey = 'en';
+            else if (currentLang === 'ja') langKey = 'ja';
+            else if (currentLang === 'ko') langKey = 'ko';
+
+            currentItems = rawItems.slice(0, sliceCount).map(item => ({ 
+                name: (item.name && (item.name[langKey] || item.name['en'] || item.name['zh'])) || 'Item', 
+                icon: item.icon, 
+                decoyName: item.decoyName ? (item.decoyName[langKey] || item.decoyName['en'] || item.decoyName['zh']) : 'Fake',
+                isDistinctDecoy: item.isDistinctDecoy || false,
+                customIcon: item.customIcon || null,
+                found: false 
+            }));
+
+            renderChecklist();
+            renderScene();
+            renderLevelSelector();
+        }
+
+        function updateChecklistTitle() {
+            const dict = i18n[currentLang];
+            const titleEl = document.getElementById('checklistTitle');
+            if (titleEl && dict) {
+                titleEl.innerHTML = `${dict.checklistPrefix}${currentLevel + 1}${dict.checklistSuffix}`;
+            }
+        }
+
+        function updateRiddleText() {
+            const riddleEl = document.getElementById('riddleText');
+            if (!riddleEl) return;
+            let levelData = levelsData[currentLevel];
+            if (levelData && levelData.riddle) {
+                let langKey = 'zh';
+                if (currentLang === 'en') langKey = 'en';
+                else if (currentLang === 'ja') langKey = 'ja';
+                else if (currentLang === 'ko') langKey = 'ko';
+                riddleEl.innerText = levelData.riddle[langKey] || levelData.riddle['en'] || levelData.riddle['zh'];
+            }
+        }
+
+        function triggerEncounter() {
+            playTone(587.33, 0.3);
+            const dict = i18n[currentLang];
+            const scene = document.getElementById('roomScene');
+            if (!scene) return;
+
+            score += 30;
+            const scoreEl = document.getElementById('score');
+            if (scoreEl) scoreEl.innerText = score;
+
+            const notice = document.createElement('div');
+            notice.style.position = 'absolute';
+            notice.style.top = '30%';
+            notice.style.left = '50%';
+            notice.style.transform = 'translate(-50%, -50%)';
+            notice.style.background = '#fef3c7';
+            notice.style.border = '3px solid #d97706';
+            notice.style.padding = '15px 25px';
+            notice.style.borderRadius = '12px';
+            notice.style.fontSize = '1.2rem';
+            notice.style.fontWeight = 'bold';
+            notice.style.color = '#92400e';
+            notice.style.zIndex = '60';
+            notice.style.boxShadow = '0 10px 25px rgba(0,0,0,0.2)';
+            notice.innerText = dict.encounterMsg;
+            scene.appendChild(notice);
+
+            setTimeout(() => notice.remove(), 2500);
+        }
+
+        function renderChecklist() {
+            const container = document.getElementById('checklistContainer');
+            if (!container) return;
+            container.innerHTML = '';
+            currentItems.forEach((item, idx) => {
+                const div = document.createElement('div');
+                let statusClass = '';
+                if (item.found) {
+                    statusClass = 'found';
+                } else if (idx === nextTargetIndex) {
+                    statusClass = 'current-target';
+                }
+                div.className = `target-item ${statusClass}`;
+                div.id = `check-${idx}`;
+                div.innerHTML = `${item.icon} ${item.name}`;
+                container.appendChild(div);
+            });
+        }
+
+        function renderScene() {
+            const scene = document.getElementById('roomScene');
+            if (!scene) return;
+            scene.innerHTML = '';
+
+            let sceneObjects = [];
+            currentItems.forEach((item, idx) => {
+                sceneObjects.push({
+                    name: item.name,
+                    icon: item.icon,
+                    isTarget: true,
+                    targetIdx: idx,
+                    isDecoid: false,
+                    isDistinct: item.isDistinctDecoy,
+                    customIcon: item.customIcon
+                });
+            });
+
+            let decoyCount = 0;
+            if (player.difficulty === 'easy') decoyCount = 1;
+            else if (player.difficulty === 'normal') decoyCount = 1 + (currentLevel % 2);
+            else if (player.difficulty === 'hard') decoyCount = 2 + (currentLevel % 2);
+            else if (player.difficulty === 'master') decoyCount = 3 + Math.floor(currentLevel / 2);
+
+            for (let i = 0; i < decoyCount; i++) {
+                let randomTarget = currentItems[Math.floor(Math.random() * currentItems.length)];
+                sceneObjects.push({
+                    name: randomTarget.decoyName || 'Fake Item',
+                    icon: randomTarget.isDistinctDecoy ? randomTarget.customIcon : randomTarget.icon,
+                    isTarget: false,
+                    isDecoid: true,
+                    isDistinct: randomTarget.isDistinctDecoy
+                });
+            }
+
+            const total = sceneObjects.length;
+            const cols = Math.ceil(Math.sqrt(total * 1.8)); 
+            const rows = Math.ceil(total / cols);
+
+            let gridCells = [];
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    gridCells.push({ r, c });
+                }
+            }
+            gridCells.sort(() => Math.random() - 0.5);
+
+            sceneObjects.forEach((obj, index) => {
+                const el = document.createElement('div');
+                el.className = 'room-object';
+                if (obj.isDecoid) {
+                    if (!obj.isDistinct) {
+                        el.classList.add('decoy-item');
+                    }
+                    let randomAngle = (Math.random() * 50 - 25).toFixed(0);
+                    let mirror = Math.random() > 0.4 ? 'scaleX(-1)' : '';
+                    el.style.transform = `rotate(${randomAngle}deg) ${mirror}`;
+                }
+                el.innerText = obj.icon;
+                
+                let cell = gridCells[index] || { r: 0, c: 0 };
+                let topPercent = (cell.r + 0.5) * (82 / Math.max(rows, 1)) + 8;
+                let leftPercent = (cell.c + 0.5) * (88 / Math.max(cols, 1)) + 6;
+
+                el.style.top = topPercent + '%';
+                el.style.left = leftPercent + '%';
+
+                el.onclick = (e) => handleObjectClick(obj, el, e);
+                scene.appendChild(el);
+            });
+        }
+
+        function handleObjectClick(obj, element, event) {
+            if (element.classList.contains('collected') || element.classList.contains('triggered')) return;
+
+            const sceneRect = document.getElementById('roomScene').getBoundingClientRect();
+            const x = event.clientX - sceneRect.left;
+            const y = event.clientY - sceneRect.top;
+            const dict = i18n[currentLang];
+
+            if (obj.isTarget) {
+                if (obj.targetIdx === nextTargetIndex) {
+                    playTone(783.99, 0.15);
+                    obj.found = true;
+                    element.classList.add('collected');
+                    score += 20;
+                    const scoreEl = document.getElementById('score');
+                    if (scoreEl) scoreEl.innerText = score;
+
+                    collectedArtifacts[obj.name] = true;
+
+                    showFloatingText(x, y, '+20', '#2563eb');
+
+                    nextTargetIndex++;
+                    renderChecklist();
+
+                    if (nextTargetIndex === currentItems.length) {
+                        if (timerInterval) clearInterval(timerInterval);
+                        handleLevelCompletion();
+                    }
+                } else {
+                    playTone(220, 0.2);
+                    showFloatingText(x, y, dict.foundPrompt, '#d97706');
+                }
+            } else {
+                playTone(150, 0.3);
+                element.classList.add('triggered');
+                if (player.hasShield) {
+                    player.hasShield = false;
+                    const shieldStatus = document.getElementById('shieldStatus');
+                    if (shieldStatus) {
+                        shieldStatus.innerText = '❌ 已耗盡';
+                        shieldStatus.style.color = '#dc2626';
+                    }
+                    showFloatingText(x, y, dict.shieldUsedPrompt, '#2563eb');
+                } else {
+                    timer += 5;
+                    totalGameTime += 5;
+                    const timerEl = document.getElementById('timer');
+                    if (timerEl) timerEl.innerText = timer;
+                    showFloatingText(x, y, dict.decoyPrompt, '#dc2626');
+                }
+            }
+        }
+
+        function showFloatingText(x, y, text, color) {
+            const scene = document.getElementById('roomScene');
+            if (!scene) return;
+            const msg = document.createElement('div');
+            msg.className = 'floating-msg';
+            msg.innerText = text;
+            msg.style.left = x + 'px';
+            msg.style.top = y + 'px';
+            msg.style.color = color;
+            scene.appendChild(msg);
+
+            setTimeout(() => msg.remove(), 700);
+        }
+
+        function handleLevelCompletion() {
+            // 解鎖下一關
+            if (currentLevel + 1 > maxUnlockedLevel && currentLevel < levelsData.length - 1) {
+                maxUnlockedLevel = currentLevel + 1;
+            }
+
+            if (currentLevel < levelsData.length - 1) {
+                const modal = document.getElementById('winModal');
+                const title = document.getElementById('modalTitle');
+                const msg = document.getElementById('winMessage');
+                const nextBtn = document.getElementById('nextLevelBtn');
+                const certContainer = document.getElementById('certificateContainer');
+                const dict = i18n[currentLang];
+
+                title.innerText = `${dict.winLevel}${currentLevel + 1}${dict.levelCleared}`;
+                msg.innerText = `${player.codename} (${player.country}), Time: ${timer}s`;
+                certContainer.innerHTML = '';
+                nextBtn.style.display = 'inline-block';
+                nextBtn.innerText = dict.btnNext;
+                modal.style.display = 'flex';
+            } else {
+                startTransitionSequence();
+            }
+        }
+
+        function startTransitionSequence() {
+            document.getElementById('gameScreen').style.display = 'none';
+            const transitionScreen = document.getElementById('transitionScreen');
+            transitionScreen.style.display = 'block';
+
+            let count = 3;
+            const timerEl = document.getElementById('transitionTimer');
+            timerEl.innerText = count;
+
+            let countdown = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    timerEl.innerText = count;
+                    playTone(500, 0.1);
+                } else {
+                    clearInterval(countdown);
+                    executeGrandmasterQuiz();
+                }
+            }, 1000);
+        }
+
+        function executeGrandmasterQuiz() {
+            document.getElementById('transitionScreen').style.display = 'none';
+            document.getElementById('quizScreen').style.display = 'block';
+
+            quizQuestions = generateQuizQuestions();
+            currentQuizIndex = 0;
+            quizScore = 0;
+            loadQuizQuestion();
+        }
+
+        function generateQuizQuestions() {
+            let allItems = [];
+            levelsData.forEach(lvl => {
+                lvl.items.forEach(item => {
+                    let langKey = 'zh';
+                    if (currentLang === 'en') langKey = 'en';
+                    else if (currentLang === 'ja') langKey = 'ja';
+                    else if (currentLang === 'ko') langKey = 'ko';
+                    allItems.push({
+                        name: item.name[langKey] || item.name['en'] || item.name['zh'],
+                        icon: item.icon
+                    });
+                });
+            });
+
+            allItems.sort(() => Math.random() - 0.5);
+            let selected = allItems.slice(0, 5);
+
+            return selected.map(target => {
+                let options = [target.name];
+                while (options.length < 4) {
+                    let randomItem = allItems[Math.floor(Math.random() * allItems.length)];
+                    if (!options.includes(randomItem.name)) {
+                        options.push(randomItem.name);
+                    }
+                }
+                options.sort(() => Math.random() - 0.5);
+                return {
+                    icon: target.icon,
+                    correct: target.name,
+                    options: options
+                };
+            });
+        }
+
+        function loadQuizQuestion() {
+            if (currentQuizIndex >= quizQuestions.length) {
+                finishGrandmasterQuiz();
+                return;
+            }
+
+            let q = quizQuestions[currentQuizIndex];
+            let qBox = document.getElementById('quizQuestionBox');
+            let progressBox = document.getElementById('quizProgress');
+            let optsContainer = document.getElementById('quizOptionsContainer');
+            optsContainer.innerHTML = '';
+
+            progressBox.innerText = `Question ${currentQuizIndex + 1} / ${quizQuestions.length}`;
+
+            let promptText = (currentLang === 'en') ? `Which artifact corresponds to this icon? ${q.icon}` :
+                             (currentLang === 'ja') ? `このアイコンに対応する宝物は何ですか？ ${q.icon}` :
+                             (currentLang === 'ko') ? `이 아이콘에 해당하는 보물은 무엇입니까? ${q.icon}` :
+                             `請問下列哪一項神器／寶物對應到此圖標？ ${q.icon}`;
+            qBox.innerText = promptText;
+
+            q.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'quiz-option-btn';
+                btn.innerText = opt;
+                btn.onclick = () => handleQuizAnswer(opt === q.correct);
+                optsContainer.appendChild(btn);
+            });
+        }
+
+        function handleQuizAnswer(isCorrect) {
+            if (isCorrect) {
+                playTone(880, 0.2);
+                quizScore++;
+                currentQuizIndex++;
+                loadQuizQuestion();
+            } else {
+                playTone(120, 0.5);
+                const dict = i18n[currentLang];
+                alert(dict.quizFailMsg);
+                document.getElementById('quizScreen').style.display = 'none';
+                document.getElementById('setupScreen').style.display = 'block';
+            }
+        }
+
+        function finishGrandmasterQuiz() {
+            playTone(1046.50, 0.4);
+            document.getElementById('quizScreen').style.display = 'none';
+            const modal = document.getElementById('winModal');
+            const title = document.getElementById('modalTitle');
+            const msg = document.getElementById('winMessage');
+            const nextBtn = document.getElementById('nextLevelBtn');
+            const certContainer = document.getElementById('certificateContainer');
+            const dict = i18n[currentLang];
+
+            title.innerText = dict.winAll;
+            let cert = getCertificateInfo(totalGameTime, player.country, currentLang);
+            let isChineseUser = (player.country === 'Taiwan' || player.country === 'China') && (currentLang === 'zh-TW' || currentLang === 'zh-CN');
+
+            msg.innerText = !isChineseUser ? 
+                `Player: ${player.codename} | Country: ${player.country} | Total Time: ${totalGameTime}s` :
+                `玩家代號: ${player.codename} | 國別: ${player.country} | 總花費時間: ${totalGameTime} 秒`;
+            
+            certContainer.innerHTML = `
+                <div class="certificate-box">
+                    <div style="font-size: 1.15rem; font-weight: bold; color: #b45309; text-align: center; margin-bottom: 5px;">
+                        ${!isChineseUser ? '📜 Certificate of Honor 📜' : '📜 時空尋寶榮譽證書 📜'}
+                    </div>
+                    <div style="font-size: 1rem; color: #334155; margin-bottom: 5px;">
+                        ${!isChineseUser ? `Player: <b>${player.codename}</b> (${player.country})` : `受獎玩家：<b>${player.codename}</b> (${player.country})`}
+                    </div>
+                    <div style="font-size: 1.05rem; font-weight: bold; color: #1e293b; margin-top: 8px;">${cert.level}</div>
+                    <p style="font-size: 0.95rem; margin: 5px 0 0 0; color: #475569;">${cert.desc}</p>
+                </div>
+            `;
+            nextBtn.style.display = 'inline-block';
+            nextBtn.innerText = !isChineseUser ? 'Finish Adventure' : '完成冒險';
+            nextBtn.onclick = () => location.reload();
+            modal.style.display = 'flex';
+        }
+
+        function getCertificateInfo(seconds, country, lang) {
+            const isChineseUser = (country === 'Taiwan' || country === 'China') && (lang === 'zh-TW' || lang === 'zh-CN');
+
+            if (isChineseUser) {
+                if (seconds <= 120) return { level: "第 1 級：傳說級「獨孤求敗」", desc: "劍氣縱橫、武學造詣登峰造極，您是當之無愧的時空尋寶至尊！" };
+                if (seconds <= 160) return { level: "第 2 級：宗師級「郭靖」", desc: "內功深厚、嚴謹智慧，對所有金庸神兵瞭如指掌！" };
+                if (seconds <= 200) return { level: "第 3 級：精英級「楊過」", desc: "聰穎過人、身手矯捷，迅速破解了密室中所有的誘答陷阱！" };
+                if (seconds <= 250) return { level: "第 4 級：榮譽級「張無忌」", desc: "仁心智勇兼備，在複雜的藏寶閣中穩紮穩打完成挑戰！" };
+                if (seconds <= 310) return { level: "第 5 級：傑出級「黃蓉」", desc: "冰雪聰明、心思縝密，展現了極佳的觀察力與記憶力！" };
+                if (seconds <= 380) return { level: "第 6 級：優秀級「段譽」", desc: "溫和堅毅、福緣深厚，一步一腳印地完成了十關考驗！" };
+                if (seconds <= 460) return { level: "第 7 級：進階級「虛竹」", desc: "福至心靈、漸入佳境，成功克服了無數似是而非的干擾物！" };
+                if (seconds <= 550) return { level: "第 8 級：熟練級「令狐沖」", desc: "瀟灑自如、漸入佳境，享受了尋寶與穿越時空的樂趣！" };
+                if (seconds <= 650) return { level: "第 9 級：探索級「韋小寶」", desc: "機智靈巧、滿載而歸，順利獲得了時空藏寶閣的結業證書！" };
+                return { level: "第 10 級：實習級「尋寶新生」", desc: "初入江湖的可愛學徒，再接再厲必能成為大師！" };
+            } else if (lang === 'ja') {
+                if (seconds <= 120) return { level: "レベル1: 伝説のマスター『アルバス・ダンブルドア』", desc: "時空を超えた究極の魔法の極意と比類なき知恵！" };
+                if (seconds <= 160) return { level: "レベル2: グランドマスター『ミネルバ・マクゴナガル』", desc: "厳格で卓越した観察眼、魔法道具の精通者！" };
+                if (seconds <= 250) return { level: "レベル3: エリート学者『ハーマイオニー・グレンジャー』", desc: "驚異的な知性と鋭い洞察力ですべてのトラップを克服！" };
+                if (seconds <= 380) return { level: "レベル4: 名誉ある魔法使い『ハリー・ポッター』", desc: "勇気と決断力を持って全ての試練を突破！" };
+                return { level: "レベル5: ホグワーツ新入生", desc: "魔法世界の素晴らしい探求者としての第一歩！" };
+            } else if (lang === 'ko') {
+                if (seconds <= 120) return { level: "레벨 1: 전설의 마스터 '알버스 덤블도어'", desc: "시공간을 초월한 궁극의 마법 지혜와 통찰력!" };
+                if (seconds <= 160) return { level: "레벨 2: 그랜드마스터 '미네르바 맥고나걸'", desc: "엄격하고 탁월한 관찰력으로 모든 마법 유물을 꿰뚫어 봅니다." };
+                if (seconds <= 250) return { level: "레벨 3: 엘리트 학자 '헤르미온느 그레인저'", desc: "놀라운 지성과 날카로운 눈썰미로 모든 가짜 함정을 극복했습니다!" };
+                if (seconds <= 380) return { level: "레벨 4: 명예로운 마법사 '해리 포터'", desc: "용기와 결단력으로 모든 챔버의 시련을 정복했습니다!" };
+                return { level: "레벨 5: 호그와트 신입생", desc: "마법 세계의 위대한 탐험을 향한 멋진 첫걸음입니다!" };
+            } else {
+                if (seconds <= 120) return { level: "Level 1: Legendary Master 'Albus Dumbledore'", desc: "Supreme magical mastery and unmatched wisdom across time and space!" };
+                if (seconds <= 160) return { level: "Level 2: Grandmaster 'Minerva McGonagall'", desc: "Strict, brilliant, and deeply knowledgeable in all magical artifacts." };
+                if (seconds <= 250) return { level: "Level 3: Elite Scholar 'Hermione Granger'", desc: "Incredible intellect and keen observation overcoming all decoy traps!" };
+                if (seconds <= 310) return { level: "Level 4: Honorable Wizard 'Harry Potter'", desc: "Brave and determined, conquering the ultimate chamber challenges!" };
+                return { level: "Level 5: Apprentice 'Hogwarts First-Year'", desc: "An enthusiastic newcomer ready to master the magical arts!" };
+            }
+        }
+
+        function nextLevel(event) {
+            if (event) event.preventDefault();
+            if (currentLevel < levelsData.length - 1) {
+                currentLevel++;
+                loadLevel(currentLevel);
+            }
+        }
+    </script>
+</body>
+</html>
