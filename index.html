@@ -770,7 +770,6 @@
             }
         };
 
-        // 豐富的金庸武俠與哈利波特大師題庫（保證每次玩都有新變化）
         const masterMasterPool = {
             wuxia: [
                 {name:{'zh': '倚天劍', 'en': 'Heaven Sword', 'ja': '倚天の剣', 'ko': '의천검'}, icon:'🗡️', decoyName: {'zh': '仿冒倚天劍', 'en': 'Fake Sword', 'ja': '偽りの剣', 'ko': '가짜 검'}},
@@ -806,7 +805,6 @@
             ]
         };
 
-        // 10個循序漸進的關卡設定：1~4關金庸、5~8關哈利波特、9~10關東西合併
         const levelsData = [
             { theme: "金庸武俠：入門藏寶閣", type: 'wuxia', count: 3, riddle: {'zh': '✨ 謎語：金庸江湖初探，尋找傳說中的武林神兵！', 'en': '✨ Riddle: Wuxia weapons of the pugilistic world.', 'ja': '✨ 謎解き：江湖の伝説の神剣を探せ！', 'ko': '✨ 수수께끼: 강호의 전설적인 무기를 찾으세요!'} },
             { theme: "金庸武俠：進階秘境", type: 'wuxia', count: 4, riddle: {'zh': '✨ 謎語：劍氣縱橫，尋找波斯與中原的奇寶！', 'en': '✨ Riddle: Secrets and divine artifacts of Jianghu.', 'ja': '✨ 謎解き：聖火の輝きと秘宝を探せ！', 'ko': '✨ 수수께끼: 비밀스러운 무공의 상징을 찾으세요!'} },
@@ -1133,7 +1131,7 @@
             currentItems = rawItems.map(item => ({ 
                 name: (item.name && (item.name[langKey] || item.name['en'] || item.name['zh'])) || 'Item', 
                 icon: item.icon, 
-                decoyName: item.decoyName ? (item.decoyName[langKey] || item.decoyName['en'] || item.decoyName['zh']) : 'Fake',
+                decoyName: (item.decoyName && (item.decoyName[langKey] || item.decoyName['en'] || item.decoyName['zh'])) || 'Fake',
                 isDistinctDecoy: item.isDistinctDecoy || false,
                 customIcon: item.customIcon || null,
                 found: false 
@@ -1232,8 +1230,6 @@
                 });
             });
 
-            // 難度遞增機制：隨著關卡增加，贗品（干擾物）數量越來越多！
-            // 基礎難度系數 + 關卡進度 (Lv 1 有 1 個贗品，Lv 10 有 4~5 個贗品)
             let baseDecoyCount = Math.min(4, Math.floor(currentLevel / 2) + 1);
             if (player.difficulty === 'easy') baseDecoyCount = Math.max(1, baseDecoyCount - 1);
             if (player.difficulty === 'hard') baseDecoyCount += 1;
@@ -1250,8 +1246,6 @@
                 });
             }
 
-            const total = sceneObjects.length;
-            
             let positions = [];
             sceneObjects.forEach((obj, index) => {
                 let posX, posY, overlapping;
@@ -1431,14 +1425,16 @@
                 let options = [target.name];
                 while (options.length < 4) {
                     let randomItem = allQuizPool[Math.floor(Math.random() * allQuizPool.length)];
-                    if (!options.includes(randomItem.name)) {
-                        options.push(randomItem.name);
+                    let itemName = randomItem.name['zh'] || randomItem.name['en'];
+                    if (!options.includes(itemName)) {
+                        options.push(itemName);
                     }
                 }
                 options.sort(() => Math.random() - 0.5);
+                let targetName = target.name['zh'] || target.name['en'];
                 return {
                     icon: target.icon,
-                    correct: target.name,
+                    correct: targetName,
                     options: options
                 };
             });
@@ -1534,27 +1530,27 @@
 
             if (isChineseUser) {
                 if (isFemale) {
-                    if (seconds <= 120) return { level: "第 1 級：傳說級「天山童姥」", desc: "劍氣縱橫、武學造詣登峰造極,您是當之無愧的時空尋寶至尊！" };
-                    if (seconds <= 160) return { level: "第 2 級：宗師級「黃蓉」", desc: "冰雪聰明、智計無雙,對所有金庸神兵瞭如指掌！" };
-                    if (seconds <= 200) return { level: "第 3 級：精英級「小龍女」", desc: "清麗脫俗、身手矯捷,迅速破解了密室中所有的誘答陷阱！" };
-                    if (seconds <= 250) return { level: "第 4 級：榮譽級「趙敏」", desc: "智勇雙全、調兵遣將,在複雜的藏寶閣中穩紮穩打完成挑戰！" };
-                    if (seconds <= 310) return { level: "第 5 級：傑出級「任盈盈」", desc: "琴心劍膽、心思縝密,展現了極佳的觀察力與記憶力！" };
-                    if (seconds <= 380) return { level: "第 6 級：優秀級「周芷若」", desc: "清麗出塵、堅毅果決,一步一腳印地完成了十關考驗！" };
-                    if (seconds <= 460) return { level: "第 7 級：進階級「李莫愁」", desc: "武功高強、雷厲風行,成功克服了無數似是而非的干擾物！" };
-                    if (seconds <= 550) return { level: "第 8 級：熟練級「穆念慈」", desc: "溫婉堅毅、福緣深厚,享受了尋寶與穿越時空的樂趣！" };
-                    if (seconds <= 650) return { level: "第 9 級：探索級「阿朱」", desc: "機智靈巧、溫柔貼心,順利獲得了時空藏寶閣的結業證書！" };
-                    return { level: "第 10 級：實習級「尋寶女俠」", desc: "初入江湖的可愛女俠,再接再厲必能成為一代宗師！" };
+                    if (seconds <= 120) return { level: "第 1 級：傳說級「天山童姥」", desc: "劍氣縱橫、武學造詣登峰造極，您是當之無愧的時空尋寶至尊！" };
+                    if (seconds <= 160) return { level: "第 2 級：宗師級「黃蓉」", desc: "冰雪聰明、智計無雙，對所有金庸神兵瞭如指掌！" };
+                    if (seconds <= 200) return { level: "第 3 級：精英級「小龍女」", desc: "清麗脫俗、身手矯捷，迅速破解了密室中所有的誘答陷阱！" };
+                    if (seconds <= 250) return { level: "第 4 級：榮譽級「趙敏」", desc: "智勇雙全、調兵遣將，在複雜的藏寶閣中穩紮穩打完成挑戰！" };
+                    if (seconds <= 310) return { level: "第 5 級：傑出級「任盈盈」", desc: "琴心劍膽、心思縝密，展現了極佳的觀察力與記憶力！" };
+                    if (seconds <= 380) return { level: "第 6 級：優秀級「周芷若」", desc: "清麗出塵、堅毅果決，一步一腳印地完成了十關考驗！" };
+                    if (seconds <= 460) return { level: "第 7 級：進階級「李莫愁」", desc: "武功高強、雷厲風行，成功克服了無數似是而非的干擾物！" };
+                    if (seconds <= 550) return { level: "第 8 級：熟練級「穆念慈」", desc: "溫婉堅毅、福緣深厚，享受了尋寶與穿越時空的樂趣！" };
+                    if (seconds <= 650) return { level: "第 9 級：探索級「阿朱」", desc: "機智靈巧、溫柔貼心，順利獲得了時空藏寶閣的結業證書！" };
+                    return { level: "第 10 級：實習級「尋寶女俠」", desc: "初入江湖的可愛女俠，再接再厲必能成為一代宗師！" };
                 } else {
-                    if (seconds <= 120) return { level: "第 1 級：傳說級「獨孤求敗」", desc: "劍氣縱橫、武學造詣登峰造極,您是當之無愧的時空尋寶至尊！" };
-                    if (seconds <= 160) return { level: "第 2 級：宗師級「郭靖」", desc: "內功深厚、嚴謹智慧,對所有金庸神兵瞭如指掌！" };
-                    if (seconds <= 200) return { level: "第 3 級：精英級「楊過」", desc: "聰穎過人、身手矯捷,迅速破解了密室中所有的誘答陷阱！" };
-                    if (seconds <= 250) return { level: "第 4 級：榮譽級「張無忌」", desc: "仁心智勇兼備,在複雜的藏寶閣中穩紮穩打完成挑戰！" };
-                    if (seconds <= 310) return { level: "第 5 級：傑出級「黃蓉」", desc: "冰雪聰明、心思縝密,展現了極佳的觀察力與記憶力！" };
-                    if (seconds <= 380) return { level: "第 6 級：優秀級「段譽」", desc: "溫和堅毅、福緣深厚,一步一腳印地完成了十關考驗！" };
-                    if (seconds <= 460) return { level: "第 7 級：進階級「虛竹」", desc: "福至心靈、漸入佳境,成功克服了無數似是而非的干擾物！" };
-                    if (seconds <= 550) return { level: "第 8 級：熟練級「令狐沖」", desc: "瀟灑自如、漸入佳境,享受了尋寶與穿越時空的樂趣！" };
-                    if (seconds <= 650) return { level: "第 9 級：探索級「韋小寶」", desc: "機智靈巧、滿載而歸,順利獲得了時空藏寶閣的結業證書！" };
-                    return { level: "第 10 級：實習級「尋寶新生」", desc: "初入江湖的可愛學徒,再接再厲必能成為大師！" };
+                    if (seconds <= 120) return { level: "第 1 級：傳說級「獨孤求敗」", desc: "劍氣縱橫、武學造詣登峰造極，您是當之無愧的時空尋寶至尊！" };
+                    if (seconds <= 160) return { level: "第 2 級：宗師級「郭靖」", desc: "內功深厚、嚴謹智慧，對所有金庸神兵瞭如指掌！" };
+                    if (seconds <= 200) return { level: "第 3 級：精英級「楊過」", desc: "聰穎過人、身手矯捷，迅速破解了密室中所有的誘答陷阱！" };
+                    if (seconds <= 250) return { level: "第 4 級：榮譽級「張無忌」", desc: "仁心智勇兼備，在複雜的藏寶閣中穩紮穩打完成挑戰！" };
+                    if (seconds <= 310) return { level: "第 5 級：傑出級「黃蓉」", desc: "冰雪聰明、心思縝密，展現了極佳的觀察力與記憶力！" };
+                    if (seconds <= 380) return { level: "第 6 級：優秀級「段譽」", desc: "溫和堅毅、福緣深厚，一步一腳印地完成了十關考驗！" };
+                    if (seconds <= 460) return { level: "第 7 級：進階級「虛竹」", desc: "福至心靈、漸入佳境，成功克服了無數似是而非的干擾物！" };
+                    if (seconds <= 550) return { level: "第 8 級：熟練級「令狐沖」", desc: "瀟灑自如、漸入佳境，享受了尋寶與穿越時空的樂趣！" };
+                    if (seconds <= 650) return { level: "第 9 級：探索級「韋小寶」", desc: "機智靈巧、滿載而歸，順利獲得了時空藏寶閣的結業證書！" };
+                    return { level: "第 10 級：實習級「尋寶新生」", desc: "初入江湖的可愛學徒，再接再厲必能成為大師！" };
                 }
             } else if (lang === 'ja') {
                 if (isFemale) {
