@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>武林與霍格華茲：十級榮譽尋寶大師 — 總設計：高雄師範大學 劉世閔博士</title>
     <style>
         :root {
@@ -24,11 +24,12 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
+            -webkit-tap-highlight-color: transparent;
         }
 
         header {
             width: 100%;
-            padding: 15px 20px;
+            padding: 12px 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -40,14 +41,14 @@
 
         h1 {
             margin: 0;
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             color: var(--accent-color);
             font-weight: 800;
         }
 
         .header-controls {
             display: flex;
-            gap: 10px;
+            gap: 6px;
             align-items: center;
         }
 
@@ -55,21 +56,17 @@
             background: #fff;
             color: #334155;
             border: 1px solid var(--card-border);
-            padding: 6px 12px;
+            padding: 4px 8px;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             font-weight: bold;
-        }
-
-        .nav-btn:hover, .lang-switcher select:hover {
-            background: #f1f5f9;
         }
 
         .game-container {
             max-width: 1050px;
             width: 95%;
-            margin: 15px auto;
+            margin: 10px auto;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -77,15 +74,16 @@
 
         #setupScreen, #encyclopediaScreen, #transitionScreen, #quizScreen {
             background: var(--panel-bg);
-            padding: 35px 40px;
+            padding: 25px 20px;
             border-radius: 16px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             max-width: 600px;
-            width: 90%;
+            width: 95%;
             text-align: center;
             border: 4px solid var(--accent-color);
-            margin-top: 25px;
+            margin-top: 15px;
             display: block;
+            box-sizing: border-box;
         }
 
         #encyclopediaScreen, #transitionScreen, #quizScreen {
@@ -93,31 +91,28 @@
         }
 
         #encyclopediaScreen {
-            max-height: 500px;
+            max-height: 400px;
             overflow-y: auto;
         }
 
         .game-hero-banner {
             background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
             color: white;
-            padding: 20px;
+            padding: 15px;
             border-radius: 12px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
             text-align: left;
         }
         .game-hero-banner h3 {
-            margin: 0 0 10px 0;
-            font-size: 1.3rem;
+            margin: 0 0 8px 0;
+            font-size: 1.1rem;
             color: #fef08a;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
         .game-hero-banner p {
             margin: 0;
-            font-size: 0.95rem;
-            line-height: 1.6;
+            font-size: 0.88rem;
+            line-height: 1.5;
             color: #f1f5f9;
         }
 
@@ -128,15 +123,16 @@
         }
 
         .form-group {
-            margin-bottom: 18px;
+            margin-bottom: 15px;
             text-align: left;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
             font-weight: bold;
             color: #334155;
+            font-size: 0.95rem;
         }
 
         .form-group input, .form-group select {
@@ -155,6 +151,7 @@
             font-weight: bold;
             color: #334155;
             cursor: pointer;
+            font-size: 0.9rem;
         }
         .checkbox-group input {
             width: 20px;
@@ -172,19 +169,19 @@
         .level-select-panel {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
+            gap: 4px;
             justify-content: center;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .level-btn {
             background: #e2e8f0;
             border: 2px solid var(--card-border);
             color: #334155;
-            padding: 6px 12px;
-            border-radius: 8px;
+            padding: 5px 10px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             font-weight: bold;
         }
 
@@ -203,15 +200,19 @@
 
         .status-bar {
             display: flex;
-            gap: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
             background: var(--panel-bg);
-            padding: 10px 20px;
+            padding: 8px 15px;
             border-radius: 10px;
             border: 2px solid var(--card-border);
-            margin-bottom: 12px;
-            font-size: 1.1rem;
+            margin-bottom: 10px;
+            font-size: 1rem;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
             align-items: center;
+            box-sizing: border-box;
+            width: 100%;
         }
 
         .status-bar span {
@@ -226,99 +227,87 @@
             padding: 4px 10px;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: bold;
-        }
-        .hint-btn:hover {
-            background: #b45309;
         }
 
         .checklist-bar {
             background: var(--panel-bg);
             border: 2px solid var(--card-border);
-            padding: 12px 20px;
+            padding: 10px 15px;
             border-radius: 10px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             width: 100%;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
         .riddle-box {
             background: #fffbeb;
             border-left: 4px solid #d97706;
-            padding: 8px 12px;
-            font-size: 0.95rem;
+            padding: 6px 10px;
+            font-size: 0.88rem;
             color: #92400e;
             font-style: italic;
             border-radius: 4px;
-            margin-bottom: 5px;
         }
 
         .checklist-items {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            max-height: 100px;
+            gap: 6px;
+            max-height: 80px;
             overflow-y: auto;
         }
 
         .target-item {
             background: #f1f5f9;
             border: 2px solid var(--card-border);
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 0.95rem;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.85rem;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
             font-weight: 600;
         }
 
         .target-item.current-target {
             border-color: #d97706;
             background: #fef3c7;
-            box-shadow: 0 0 8px rgba(217, 119, 6, 0.4);
         }
 
         .target-item.found {
             text-decoration: line-through;
             color: #94a3b8;
             background: #e2e8f0;
-            border-color: #cbd5e1;
         }
 
         .room-scene {
             position: relative;
             width: 100%;
-            height: 520px;
+            height: 420px;
             background: linear-gradient(135deg, #fef9c3 0%, #e0f2fe 100%);
             border: 4px solid #94a3b8;
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.1), 0 10px 25px rgba(0,0,0,0.1);
+            box-sizing: border-box;
         }
 
         .room-object {
             position: absolute;
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             cursor: pointer;
             user-select: none;
-            filter: drop-shadow(0 3px 6px rgba(0,0,0,0.2));
-            z-index: 10;
-            width: 50px;
-            height: 50px;
+            width: 45px;
+            height: 45px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: transform 0.15s ease;
-        }
-
-        .room-object:hover {
-            transform: scale(1.25) !important;
+            touch-action: manipulation;
         }
 
         .room-object.decoy-item {
@@ -328,7 +317,7 @@
 
         @keyframes pulseGlow {
             0% { transform: scale(1); filter: drop-shadow(0 0 5px #d97706); }
-            50% { transform: scale(1.4); filter: drop-shadow(0 0 20px #ef4444); }
+            50% { transform: scale(1.3); filter: drop-shadow(0 0 15px #ef4444); }
             100% { transform: scale(1); filter: drop-shadow(0 0 5px #d97706); }
         }
         .room-object.hint-glow {
@@ -347,37 +336,27 @@
             justify-content: center;
             align-items: center;
             z-index: 100;
+            box-sizing: border-box;
+            padding: 15px;
         }
 
         .modal-content {
             background: var(--panel-bg);
-            padding: 30px;
+            padding: 25px;
             border-radius: 16px;
-            max-width: 550px;
-            width: 90%;
+            max-width: 500px;
+            width: 100%;
             text-align: center;
             border: 4px solid #d97706;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-        }
-
-        .modal-content h2 {
-            color: #d97706;
-            margin-top: 0;
-            font-size: 1.8rem;
-        }
-
-        .modal-content p {
-            font-size: 1.1rem;
-            color: #334155;
-            line-height: 1.6;
+            box-sizing: border-box;
         }
 
         .certificate-box {
             background: #fffbeb;
             border: 3px double #d97706;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
             text-align: left;
         }
 
@@ -385,16 +364,13 @@
             background-color: var(--accent-color);
             color: #ffffff;
             border: none;
-            padding: 12px 25px;
-            font-size: 1.2rem;
+            padding: 10px 20px;
+            font-size: 1.1rem;
             font-weight: bold;
             border-radius: 8px;
             cursor: pointer;
-            margin-top: 15px;
-        }
-
-        .btn:hover {
-            background-color: var(--accent-hover);
+            margin-top: 12px;
+            width: 100%;
         }
 
         .quiz-option-btn {
@@ -402,44 +378,40 @@
             width: 100%;
             background: #f1f5f9;
             border: 2px solid var(--card-border);
-            padding: 12px;
-            margin: 10px 0;
+            padding: 10px;
+            margin: 8px 0;
             border-radius: 8px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: bold;
             color: #334155;
             cursor: pointer;
             text-align: left;
-            transition: all 0.2s;
-        }
-        .quiz-option-btn:hover {
-            background: #e2e8f0;
-            border-color: var(--accent-color);
+            box-sizing: border-box;
         }
 
         .floating-msg {
             position: absolute;
             font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             pointer-events: none;
             z-index: 50;
         }
 
         .encyclopedia-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 10px;
-            margin-top: 15px;
-            max-height: 300px;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: 8px;
+            margin-top: 12px;
+            max-height: 250px;
             overflow-y: auto;
             text-align: left;
         }
         .encyclopedia-item {
             background: #f1f5f9;
             border: 1px solid var(--card-border);
-            padding: 8px;
-            border-radius: 8px;
-            font-size: 0.9rem;
+            padding: 6px;
+            border-radius: 6px;
+            font-size: 0.8rem;
         }
         .encyclopedia-item.locked {
             opacity: 0.4;
@@ -450,15 +422,15 @@
 <body>
 
     <header>
-        <h1 id="appTitle">🏛️ 武林與霍格華茲：十級榮譽尋寶大師 — 總設計：高雄師範大學 劉世閔博士</h1>
+        <h1 id="appTitle">🏛️ 尋寶大師 — 高師 劉世閔博士</h1>
         <div class="header-controls">
-            <button class="nav-btn" id="encyclopediaBtn" type="button">📜 寶物殿堂</button>
-            <button class="nav-btn" id="audioToggleBtn" type="button" style="background:#d97706; color:white;">🎵 音樂開關</button>
+            <button class="nav-btn" id="encyclopediaBtn" type="button">📜 圖鑑</button>
+            <button class="nav-btn" id="audioToggleBtn" type="button" style="background:#d97706; color:white;">🎵 音樂</button>
             <div class="lang-switcher">
                 <select id="langSelect">
-                    <option value="zh-TW">繁體中文</option>
-                    <option value="zh-CN">简体中文</option>
-                    <option value="en">English</option>
+                    <option value="zh-TW">繁中</option>
+                    <option value="zh-CN">简体</option>
+                    <option value="en">EN</option>
                     <option value="ja">日本語</option>
                     <option value="ko">한국어</option>
                 </select>
@@ -470,13 +442,13 @@
         <!-- 設定首頁 -->
         <div id="setupScreen">
             <div class="game-hero-banner">
-                <h3 id="heroTitle">⚔️ 跨時空傳奇：武林神兵與魔法密寶之旅 🪄</h3>
+                <h3 id="heroTitle">⚔️ 武林與霍格華茲傳奇 🪄</h3>
                 <p id="heroDesc">
-                    歡迎來到東西方傳奇交織的時空藏寶閣！從金庸筆下的倚天劍、屠龍刀，到霍格華茲的老魔杖與分靈體。考驗您的眼力、文學聯想與專注力。完成十關歷練並通過宗師試煉，奪取至高無上的十級榮譽證書！
+                    挑戰10關東西方傳奇神兵尋寶與宗師試煉，奪取專屬榮譽證書！
                 </p>
             </div>
 
-            <h2 id="setupTitle" style="color: #2563eb; margin-top:0;">玩家冒險檔案與難度設定</h2>
+            <h2 id="setupTitle" style="color: #2563eb; margin-top:0; font-size: 1.2rem;">玩家冒險檔案與難度設定</h2>
             <div class="form-group">
                 <label id="labelCodename">代號 / 玩家名稱：</label>
                 <input type="text" id="playerCodename" placeholder="請輸入您的代號">
@@ -509,47 +481,46 @@
             <div class="form-group">
                 <label id="labelDifficulty">選擇遊戲難度：</label>
                 <select id="playerDifficulty">
-                    <option value="novice" id="diffNovice">入門級 (Novice - 50%物品、無干擾)</option>
-                    <option value="easy" id="diffEasy">輕鬆級 (Easy - 70%物品、1個同類仿冒物)</option>
-                    <option value="normal" id="diffNormal" selected>普通級 (Normal - 80%物品、1-2個同類仿冒物)</option>
-                    <option value="hard" id="diffHard">困難級 (Hard - 90%物品、2-3個同類仿冒物)</option>
-                    <option value="master" id="diffMaster">大師級 (Master - 全部物品、高難度微瑕仿冒物)</option>
+                    <option value="novice" id="diffNovice">入門級 (50%物品、無干擾)</option>
+                    <option value="easy" id="diffEasy">輕鬆級 (70%物品、1個仿冒)</option>
+                    <option value="normal" id="diffNormal" selected>普通級 (80%物品、1-2個仿冒)</option>
+                    <option value="hard" id="diffHard">困難級 (90%物品、2-3個仿冒)</option>
+                    <option value="master" id="diffMaster">大師級 (全部物品、高難度)</option>
                 </select>
             </div>
             <div class="form-group">
                 <label class="checkbox-group">
                     <input type="checkbox" id="useShield" checked>
-                    <span id="labelShield">🛡️ 攜帶「降龍護符 / 魔法防護罩」（可免疫 1 次干擾物懲罰）</span>
+                    <span id="labelShield">🛡️ 攜帶防護罩（免疫1次干擾懲罰）</span>
                 </label>
             </div>
-            <button class="btn" id="startBtn" type="button">開始冒險 / Start Game</button>
+            <button class="btn" id="startBtn" type="button">開始冒險 / Start</button>
         </div>
 
-        <!-- 寶物殿堂（圖鑑）畫面 -->
+        <!-- 寶物殿堂畫面 -->
         <div id="encyclopediaScreen">
-            <h2 id="encyclopediaTitle" style="color: #2563eb; margin-top:0;">📜 時空寶物殿堂 (Encyclopedia)</h2>
-            <p id="encyclopediaDesc" style="color: #475569; font-size: 0.95rem;">收集您在冒險中尋獲的傳奇武林神兵與霍格華茲魔法道具！</p>
+            <h2 id="encyclopediaTitle" style="color: #2563eb; margin-top:0; font-size: 1.2rem;">📜 時空寶物殿堂</h2>
+            <p id="encyclopediaDesc" style="color: #475569; font-size: 0.88rem;">收集您在冒險中尋獲的傳奇神兵與魔法道具！</p>
             <div class="encyclopedia-grid" id="encyclopediaGrid"></div>
             <button class="btn" id="backToSetupBtn" type="button">返回 / Back</button>
         </div>
 
-        <!-- 轉場過場動畫畫面 -->
+        <!-- 轉場過場畫面 -->
         <div id="transitionScreen">
-            <h2 style="color: #f59e0b; font-size: 2rem; margin-top: 0;">⚡ 宗師殿堂：終極大考驗 ⚡</h2>
-            <p style="font-size: 1.1rem; line-height: 1.8; color: #cbd5e1; margin: 25px 0;">
-                「十關歷練已過，江湖風雲再起。<br>
-                唯有博古通今、洞察秋毫之大師，方能通過終極五道智力考驗，榮獲時空至高榮譽證書！」
+            <h2 style="color: #f59e0b; font-size: 1.5rem; margin-top: 0;">⚡ 宗師殿堂：終極大考驗 ⚡</h2>
+            <p style="font-size: 0.95rem; line-height: 1.6; color: #cbd5e1; margin: 15px 0;">
+                十關歷練已過，請接受終極五道智力考驗！
             </p>
-            <div id="transitionTimer" style="font-size: 2.5rem; font-weight: bold; color: #fbbf24; margin: 20px 0;">3</div>
-            <button class="btn" id="startQuizDirectBtn" type="button" style="background-color: #d97706;">立即接受考驗 / Begin Trial</button>
+            <div id="transitionTimer" style="font-size: 2rem; font-weight: bold; color: #fbbf24; margin: 15px 0;">3</div>
+            <button class="btn" id="startQuizDirectBtn" type="button" style="background-color: #d97706;">立即接受考驗</button>
         </div>
 
         <!-- 宗師試煉選擇題畫面 -->
         <div id="quizScreen">
-            <h2 id="quizHeader" style="color: #d97706; margin-top:0;">🏆 宗師殿堂：終極試煉</h2>
-            <p id="quizInstructions" style="color: #475569; font-size: 0.95rem;">5道隨機考題全對即可榮獲十級大師證書，答錯一題將重返第一關重新練功！</p>
-            <div id="quizProgress" style="font-weight: bold; color: #2563eb; margin: 10px 0;"></div>
-            <div id="quizQuestionBox" style="font-size: 1.15rem; font-weight: bold; color: #1e293b; margin: 15px 0;"></div>
+            <h2 id="quizHeader" style="color: #d97706; margin-top:0; font-size: 1.2rem;">🏆 宗師殿堂：終極試煉</h2>
+            <p id="quizInstructions" style="color: #475569; font-size: 0.85rem;">5道隨機考題全對即可榮獲證書！</p>
+            <div id="quizProgress" style="font-weight: bold; color: #2563eb; margin: 8px 0; font-size: 0.9rem;"></div>
+            <div id="quizQuestionBox" style="font-size: 1rem; font-weight: bold; color: #1e293b; margin: 12px 0;"></div>
             <div id="quizOptionsContainer"></div>
         </div>
 
@@ -560,14 +531,14 @@
             <div class="status-bar">
                 <div>得分: <span id="score">0</span></div>
                 <div>時間: <span id="timer">0</span>s</div>
-                <div>護符狀態: <span id="shieldStatus" style="color:#16a34a;">🛡️ 已啟動</span></div>
-                <button class="hint-btn" id="hintBtn" type="button">💡 提示 (Hint)</button>
+                <div>護符: <span id="shieldStatus" style="color:#16a34a;">🛡️</span></div>
+                <button class="hint-btn" id="hintBtn" type="button">💡 提示</button>
             </div>
 
             <div class="checklist-bar">
-                <div class="riddle-box" id="riddleText">✨ 謎語提示：尋找傳說中的武林至尊神兵...</div>
-                <div id="checklistTitle" style="font-size: 1.05rem; font-weight: bold; color: #334155;">
-                    🔍 第 1 關尋寶清單（請依黃色框標示的順序點擊）：
+                <div class="riddle-box" id="riddleText">✨ 謎語提示...</div>
+                <div id="checklistTitle" style="font-size: 0.9rem; font-weight: bold; color: #334155;">
+                    🔍 尋寶清單：
                 </div>
                 <div class="checklist-items" id="checklistContainer"></div>
             </div>
@@ -576,7 +547,7 @@
         </div>
     </div>
 
-    <!-- 通關 / 證書彈窗 -->
+    <!-- 通關彈窗 -->
     <div class="modal" id="winModal">
         <div class="modal-content">
             <h2 id="modalTitle">🎉 關卡完成！</h2>
@@ -589,6 +560,282 @@
     <script>
         const i18n = {
             'zh-TW': {
-                appTitle: '🏛️ 武林與霍格華茲：十級榮譽尋寶大師 — 總設計：高雄師範大學 劉世閔博士',
-                heroTitle: '⚔️ 跨時空傳奇：武林神兵與魔法密寶之旅 🪄',
-                heroDesc: '歡迎
+                appTitle: '🏛️ 尋寶大師 — 總設計：高雄師範大學 劉世閔博士',
+                heroTitle: '⚔️ 武林與霍格華茲傳奇 🪄',
+                heroDesc: '挑戰10關東西方傳奇神兵尋寶與宗師試煉，奪取專屬榮譽證書！',
+                setupTitle: '玩家冒險檔案與難度設定',
+                labelCodename: '代號 / 玩家名稱：',
+                labelGender: '性別：',
+                optMale: '男',
+                optFemale: '女',
+                optOther: '其他',
+                labelCountry: '國別：',
+                labelDifficulty: '選擇遊戲難度：',
+                labelShield: '🛡️ 攜帶防護罩（免疫1次干擾懲罰）',
+                diffNovice: '入門級 (50%物品、無干擾)',
+                diffEasy: '輕鬆級 (70%物品、1個仿冒)',
+                diffNormal: '普通級 (80%物品、1-2個仿冒)',
+                diffHard: '困難級 (90%物品、2-3個仿冒)',
+                diffMaster: '大師級 (全部物品、高難度)',
+                startBtn: '開始冒險',
+                encyclopediaBtn: '📜 圖鑑',
+                encyclopediaTitle: '📜 時空寶物殿堂',
+                encyclopediaDesc: '收集您在冒險中尋獲的傳奇神兵與魔法道具！',
+                backToSetupBtn: '返回',
+                checklistPrefix: '🔍 第 ',
+                checklistSuffix: ' 關清單：',
+                btnNext: '進入終極大考驗',
+                winLevel: '🎉 第 ',
+                levelCleared: ' 關通關！',
+                winAll: '🏆 恭喜通關所有十關！',
+                foundPrompt: '依序找!',
+                decoyPrompt: '假貨！+5s!',
+                shieldUsedPrompt: '🛡️ 防護罩抵銷懲罰！',
+                hintBtnText: '💡 提示',
+                encounterMsg: '🌟 奇遇：大俠相助，化解危機！',
+                quizHeader: '🏆 宗師殿堂：終極試煉',
+                quizInstructions: '5道隨機考題全對即可榮獲證書！',
+                quizFailMsg: '❌ 答錯！返回第一關重練！',
+                quizSuccessMsg: '🏆 恭喜全對！',
+                lockedLevelAlert: '🔒 尚未解鎖！',
+                designerCredit: '總設計：高雄師範大學 劉世閔博士'
+            },
+            'zh-CN': {
+                appTitle: '🏛️ 寻宝大师 — 总设计：高雄师范大学 刘世闵博士',
+                heroTitle: '⚔️ 武林与霍格华兹传奇 🪄',
+                heroDesc: '挑战10关东西方传奇神兵寻宝与宗师试炼，夺取专属荣誉证书！',
+                setupTitle: '玩家冒险档案与难度设定',
+                labelCodename: '代号 / 玩家名称：',
+                labelGender: '性别：',
+                optMale: '男',
+                optFemale: '女',
+                optOther: '其他',
+                labelCountry: '国别：',
+                labelDifficulty: '选择游戏难度：',
+                labelShield: '🛡️ 携带防护罩（免疫1次干扰惩罚）',
+                diffNovice: '入门级 (50%物品、无干扰)',
+                diffEasy: '轻松级 (70%物品、1个仿冒)',
+                diffNormal: '普通级 (80%物品、1-2个仿冒)',
+                diffHard: '困难级 (90%物品、2-3个仿冒)',
+                diffMaster: '大师级 (全部物品、高难度)',
+                startBtn: '开始冒险',
+                encyclopediaBtn: '📜 图鉴',
+                encyclopediaTitle: '📜 时空宝物殿堂',
+                encyclopediaDesc: '收集您在冒险中寻获的传奇神兵与魔法道具！',
+                backToSetupBtn: '返回',
+                checklistPrefix: '🔍 第 ',
+                checklistSuffix: ' 关清单：',
+                btnNext: '进入终极大考验',
+                winLevel: '🎉 第 ',
+                levelCleared: ' 关通关！',
+                winAll: '🏆 恭喜通关所有十关！',
+                foundPrompt: '依序找!',
+                decoyPrompt: '假货！+5s!',
+                shieldUsedPrompt: '🛡️ 防护罩抵销惩罚！',
+                hintBtnText: '💡 提示',
+                encounterMsg: '🌟 奇遇：大侠相助，化解危机！',
+                quizHeader: '🏆 宗师殿堂：终极试炼',
+                quizInstructions: '5道随机考题全对即可荣获证书！',
+                quizFailMsg: '❌ 答错！返回第一关重练！',
+                quizSuccessMsg: '🏆 恭喜全对！',
+                lockedLevelAlert: '🔒 尚未解锁！',
+                designerCredit: '总设计：高雄师范大学 刘世闵博士'
+            },
+            'en': {
+                appTitle: '🏛️ Treasure Master — Designer: NKNU, Dr. Shih-Min Liu',
+                heroTitle: '⚔️ Wuxia & Magic Journey 🪄',
+                heroDesc: 'Challenge 10 artifact searching levels and trials to earn your certificate!',
+                setupTitle: 'Player Profile & Setup',
+                labelCodename: 'Name:',
+                labelGender: 'Gender:',
+                optMale: 'Male',
+                optFemale: 'Female',
+                optOther: 'Other',
+                labelCountry: 'Country:',
+                labelDifficulty: 'Difficulty:',
+                labelShield: '🛡️ Shield (Immune to 1 penalty)',
+                diffNovice: 'Novice',
+                diffEasy: 'Easy',
+                diffNormal: 'Normal',
+                diffHard: 'Hard',
+                diffMaster: 'Master',
+                startBtn: 'Start Adventure',
+                encyclopediaBtn: '📜 Library',
+                encyclopediaTitle: '📜 Chamber of Artifacts',
+                encyclopediaDesc: 'Collect legendary artifacts!',
+                backToSetupBtn: 'Back',
+                checklistPrefix: '🔍 Level ',
+                checklistSuffix: ' Checklist:',
+                btnNext: 'Enter Grandmaster Trial',
+                winLevel: '🎉 Level ',
+                winAll: '🏆 All levels cleared!',
+                foundPrompt: 'Follow order!',
+                decoyPrompt: 'Fake! +5s!',
+                shieldUsedPrompt: '🛡️ Shield blocked!',
+                hintBtnText: '💡 Hint',
+                encounterMsg: '🌟 Encounter: Hero helped!',
+                quizHeader: '🏆 Grandmaster Trial',
+                quizInstructions: 'Answer 5 questions correctly!',
+                quizFailMsg: '❌ Incorrect! Back to Level 1!',
+                quizSuccessMsg: '🏆 All correct!',
+                lockedLevelAlert: '🔒 Level locked!',
+                designerCredit: 'Designer: NKNU, Dr. Shih-Min Liu'
+            },
+            'ja': {
+                appTitle: '🏛️ トレジャーマスター — 総設計：高雄師範大学 劉世閔博士',
+                heroTitle: '⚔️ 武術と魔法の旅 🪄',
+                heroDesc: '10のレベルと試練をクリアして、証明書を手に入れよう！',
+                setupTitle: 'プレイヤー設定',
+                labelCodename: '名前：',
+                labelGender: '性別：',
+                optMale: '男性',
+                optFemale: '女性',
+                optOther: 'その他',
+                labelCountry: '国籍：',
+                labelDifficulty: '難易度：',
+                labelShield: '🛡️ シールド装備',
+                diffNovice: '初心者',
+                diffEasy: '簡単',
+                diffNormal: '普通',
+                diffHard: '難しい',
+                diffMaster: 'マスター',
+                startBtn: '冒険開始',
+                encyclopediaBtn: '📜 図鑑',
+                encyclopediaTitle: '📜 宝物殿堂',
+                encyclopediaDesc: '伝説のアイテムを収集しよう！',
+                backToSetupBtn: '戻る',
+                checklistPrefix: '🔍 レベル ',
+                checklistSuffix: ' リスト：',
+                btnNext: '試練へ',
+                winLevel: '🎉 レベル ',
+                levelCleared: ' クリア！',
+                winAll: '🏆 全クリア！',
+                foundPrompt: '順番に!',
+                decoyPrompt: '偽物！+5s!',
+                shieldUsedPrompt: '🛡️ シールド防御！',
+                hintBtnText: '💡 ヒント',
+                encounterMsg: '🌟 遭遇：武芸者の助け！',
+                quizHeader: '🏆 グランドマスター試練',
+                quizInstructions: '5問全問正解しよう！',
+                quizFailMsg: '❌ 不正解！レベル1に戻る！',
+                quizSuccessMsg: '🏆 全問正解！',
+                lockedLevelAlert: '🔒 ロック中！',
+                designerCredit: '総設計：高雄師範大学 劉世閔博士 (Dr. Shih-Min Liu)'
+            },
+            'ko': {
+                appTitle: '🏛️ 보물 마스터 — 총디자인: 국립가오슝사범대학교 류세민 박사',
+                heroTitle: '⚔️ 무협과 마법의 여정 🪄',
+                heroDesc: '10단계 보물 찾기와 시련을 돌파하고 증서를 획득하세요!',
+                setupTitle: '플레이어 설정',
+                labelCodename: '이름:',
+                labelGender: '성별:',
+                optMale: '남성',
+                optFemale: '여성',
+                optOther: '기타',
+                labelCountry: '국가:',
+                labelDifficulty: '난이도:',
+                labelShield: '🛡️ 보호막 장착',
+                diffNovice: '초급',
+                diffEasy: '쉬움',
+                diffNormal: '보통',
+                diffHard: '어려움',
+                diffMaster: '마스터',
+                startBtn: '모험 시작',
+                encyclopediaBtn: '📜 도감',
+                encyclopediaTitle: '📜 보물 전당',
+                encyclopediaDesc: '전설의 아이템을 수집하세요!',
+                backToSetupBtn: '돌아가기',
+                checklistPrefix: '🔍 ',
+                checklistSuffix: '단계 목록:',
+                btnNext: '시련으로',
+                winLevel: '🎉 ',
+                levelCleared: '단계 클리어!',
+                winAll: '🏆 전단계 클리어!',
+                foundPrompt: '순서대로!',
+                decoyPrompt: '가짜! +5s!',
+                shieldUsedPrompt: '🛡️ 보호막 방어!',
+                hintBtnText: '💡 힌트',
+                encounterMsg: '🌟 조우: 협객의 도움!',
+                quizHeader: '🏆 그랜드마스터 시련',
+                quizInstructions: '5문제를 모두 맞히세요!',
+                quizFailMsg: '❌ 오답! 1단계로 강등!',
+                quizSuccessMsg: '🏆 정답!',
+                lockedLevelAlert: '🔒 잠긴 레벨!',
+                designerCredit: '총디자인: 국립가오슝사범대학교 류세민 박사 (Dr. Shih-Min Liu)'
+            }
+        };
+
+        const levelsData = [
+            { 
+                theme: "金庸武俠入門", 
+                riddle: {
+                    'zh': '✨ 謎語：劍氣縱橫三萬里，一劍光寒定江湖。尋找傳說中的武林神兵！',
+                    'en': '✨ Riddle: A legendary blade that commands the pugilistic world.',
+                    'ja': '✨ 謎解き：天下を制する伝説の神剣を探せ！',
+                    'ko': '✨ 수수께끼: 천하를 호령하는 전설의 신검을 찾으세요!'
+                },
+                items: [
+                    {name:{'zh': '倚天劍', 'en': 'Heaven Sword', 'ja': '倚天の剣', 'ko': '의천검'}, icon:'🗡️', decoyName: {'zh': '仿冒倚天劍', 'en': 'Fake Sword', 'ja': '偽りの剣', 'ko': '가짜 검'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '屠龍刀', 'en': 'Dragon Saber', 'ja': '屠龍の宝刀', 'ko': '도룡도'}, icon:'🔪', decoyName: {'zh': '仿冒屠龍刀', 'en': 'Fake Saber', 'ja': '偽りの宝刀', 'ko': '가짜 도룡도'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '打狗棒', 'en': 'Dog-Beating Staff', 'ja': '打狗棒', 'ko': '타구봉'}, icon:'🥢', decoyName: {'zh': '仿冒打狗棒', 'en': 'Fake Staff', 'ja': '偽りの棒', 'ko': '가짜 타구봉'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '玄鐵重劍', 'en': 'Heavy Iron Sword', 'ja': '玄鉄の重剣', 'ko': '현철중검'}, icon:'⚔️', decoyName: {'zh': '劣質重劍', 'en': 'Fake Heavy Sword', 'ja': '偽りの重剣', 'ko': '가짜 중검'}, isDistinctDecoy: false}
+                ]
+            },
+            { 
+                theme: "金庸神兵進階", 
+                riddle: {
+                    'zh': '✨ 謎語：火焰燃燒聖火令，金蛇狂舞劍氣生。尋找波斯與中原的奇寶！',
+                    'en': '✨ Riddle: Flames of holy fire and golden serpents dancing in the wind.',
+                    'ja': '✨ 謎解き：聖火の輝きと金蛇の舞う剣を探せ！',
+                    'ko': '✨ 수수께끼: 성화의 불꽃과 금사(金蛇)가 춤추는 보물을 찾으세요!'
+                },
+                items: [
+                    {name:{'zh': '聖火令', 'en': 'Holy Flame Tablet', 'ja': '聖火令', 'ko': '성화령'}, icon:'🔥', decoyName: {'zh': '仿冒聖火令', 'en': 'Fake Tablet', 'ja': '偽りの聖火令', 'ko': '가짜 성화령'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '金蛇劍', 'en': 'Golden Snake Sword', 'ja': '金蛇の剣', 'ko': '금사검'}, icon:'🐍', decoyName: {'zh': '仿冒金蛇劍', 'en': 'Fake Snake Sword', 'ja': '偽りの剣', 'ko': '가짜 금사검'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '六脈神劍', 'en': 'Six Meridians Sword', 'ja': '六脈神剣', 'ko': '육맥신검'}, icon:'✨', decoyName: {'zh': '仿冒神劍', 'en': 'Fake Sword', 'ja': '偽りの剣', 'ko': '가짜 검'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '淑女劍', 'en': 'Lady Sword', 'ja': '淑女の剣', 'ko': '숙녀검'}, icon:'🗡️', decoyName: {'zh': '仿冒淑女劍', 'en': 'Fake Lady Sword', 'ja': '偽りの剣', 'ko': '가짜 숙녀검'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '君子劍', 'en': 'Gentleman Sword', 'ja': '君子の剣', 'ko': '군자검'}, icon:'⚔️', decoyName: {'zh': '仿冒君子劍', 'en': 'Fake Gentleman Sword', 'ja': '偽りの剣', 'ko': '가짜 군자검'}, isDistinctDecoy: false}
+                ]
+            },
+            { 
+                theme: "金庸奇門暗器", 
+                riddle: {
+                    'zh': '✨ 謎語：冰魄寒針透骨涼，判官墨筆斷陰陽。尋找江湖中令人聞風喪膽的暗器！',
+                    'en': '✨ Riddle: Piercing needles of ice and the judge brush that decides fate.',
+                    'ja': '✨ 謎解き：骨まで凍る氷の針と運命を定める判官の筆！',
+                    'ko': '✨ 수수께끼: 뼈까지 얼리는 얼음 바늘과 운명을 결정하는 판관의 붓!'
+                },
+                items: [
+                    {name:{'zh': '冰魄銀針', 'en': 'Ice-Soul Needle', 'ja': '氷魄銀針', 'ko': '빙백은침'}, icon:'📌', decoyName: {'zh': '普通銀針', 'en': 'Fake Needle', 'ja': '偽りの針', 'ko': '가짜 바늘'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '判官筆', 'en': 'Judge Pen', 'ja': '判官の筆', 'ko': '판관필'}, icon:'✒️', decoyName: {'zh': '普通毛筆', 'en': 'Fake Pen', 'ja': '偽りの筆', 'ko': '가짜 붓'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '綠波香露刀', 'en': 'Green Scented Blade', 'ja': '緑波香露刀', 'ko': '녹파향로도'}, icon:'🧪', decoyName: {'zh': '普通毒瓶', 'en': 'Fake Bottle', 'ja': '偽りの瓶', 'ko': '가짜 병'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '軟鞭', 'en': 'Flexible Whip', 'ja': '軟鞭', 'ko': '연편'}, icon:'🧶', decoyName: {'zh': '普通繩索', 'en': 'Fake Whip', 'ja': '偽りの鞭', 'ko': '가짜 채찍'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '枯木禪杖', 'en': 'Withered Staff', 'ja': '枯木禅杖', 'ko': '고목선장'}, icon:'🪵', decoyName: {'zh': '普通木柴', 'en': 'Fake Wood', 'ja': '偽りの木', 'ko': '가짜 나무'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '打神鞭', 'en': 'God Whip', 'ja': '打神鞭', 'ko': '타신편'}, icon:'⚡', decoyName: {'zh': '普通木棍', 'en': 'Fake Stick', 'ja': '偽りの棒', 'ko': '가짜 막대'}, isDistinctDecoy: false}
+                ]
+            },
+            { 
+                theme: "金庸江湖密寶", 
+                riddle: {
+                    'zh': '✨ 謎語：江湖密寶暗藏殺機，鐵算盤與金針各顯神通！', 
+                    'en': '✨ Riddle: Hidden treasures and lethal hidden weapons of Jianghu.', 
+                    'ja': '✨ 謎解き：江湖の秘宝と隠し武器を探せ！', 
+                    'ko': '✨ 수수께끼: 강호의 숨겨진 비보와 암기를 찾으세요!'
+                },
+                items: [
+                    {name:{'zh': '血刀', 'en': 'Blood Saber', 'ja': '血刀', 'ko': '혈도'}, icon:'🩸', decoyName: {'zh': '仿冒血刀', 'en': 'Fake Saber', 'ja': '偽りの血刀', 'ko': '가짜 혈도'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '蝴蝶鏢', 'en': 'Butterfly Dart', 'ja': '蝶の鏢', 'ko': '호접표'}, icon:'🦋', decoyName: {'zh': '仿冒蝴蝶鏢', 'en': 'Fake Dart', 'ja': '偽りの鏢', 'ko': '가짜 표창'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '鐵茶壺', 'en': 'Iron Teapot', 'ja': '鉄の急須', 'ko': '철다주'}, icon:'🫖', decoyName: {'zh': '普通茶壺', 'en': 'Fake Teapot', 'ja': '偽りの急須', 'ko': '가짜 주전자'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '繡花針', 'en': 'Embroidery Needle', 'ja': '刺繍針', 'ko': '자수바늘'}, icon:'📍', decoyName: {'zh': '普通縫針', 'en': 'Fake Needle', 'ja': '偽りの針', 'ko': '가짜 바늘'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '玉蜂針', 'en': 'Jade Bee Needle', 'ja': '玉蜂の針', 'ko': '옥봉침'}, icon:'🐝', decoyName: {'zh': '普通蜂針', 'en': 'Fake Bee Needle', 'ja': '偽りの蜂針', 'ko': '가짜 벌침'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '鐵算盤', 'en': 'Iron Abacus', 'ja': '鉄のそろばん', 'ko': '철주판'}, icon:'🔢', decoyName: {'zh': '普通算盤', 'en': 'Fake Abacus', 'ja': '偽りのそろばん', 'ko': '가짜 주판'}, isDistinctDecoy: false}, 
+                    {name:{'zh': '青光劍', 'en': 'Cyan Sword', 'ja': '青光の剣', 'ko': '청광검'}, icon:'🗡️', decoyName: {'zh': '仿冒青光劍', 'en': 'Fake Sword', 'ja': '偽りの剣', 'ko': '가짜 검'}, isDistinctDecoy: false}
+                ]
+            },
+            { 
+                theme: "金庸絕學神兵", 
+                riddle: {
+                    'zh': '✨ 謎語：琴韻蕭聲響徹武林，絕學神兵震撼四方！', 
+                    'en': '✨ Riddle: Melodies of zithers and martial arts supreme.', 
+                    'ja': '✨ 謎解き：武林に響く琴と簫の音、絶妙な神兵を探せ！', 
+                    'ko': '✨ 수수께끼: 무림
